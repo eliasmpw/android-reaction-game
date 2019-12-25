@@ -18,15 +18,23 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private final String TAG = this.getClass().getSimpleName();
     private static final FirebaseDatabase database = FirebaseDatabase.getInstance();
+
     private static final DatabaseReference lookingforgameGetRef = database.getReference("lookingforgame");
     private static DatabaseReference lookingforgameRef = lookingforgameGetRef.push();
+//    private DatabaseReference mDatabase;
+
+
+    private static final DatabaseReference gameInProgressGetRef = database.getReference("gameinprogress");
+    private static DatabaseReference gameInProgressRef = gameInProgressGetRef.push();
     SessionManager session;
-    private Profile userProfile;
+//    private Profile userProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +56,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Log.v(TAG, "CLICKED PLAY BUTTON!!!!");
                 Log.v(TAG, userID);
-                addNameToLookingForGameDB();
+                addNameToLookingForGameDB(userID);
+                MatchMaking();
+                // ADD HERE YOUR INTENT TO THE ACTIVITY OF GAME!!!!
             }
         });
 
@@ -68,15 +78,18 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Log.v(TAG, "CLICKED exitButton BUTTON!!!!");
                 Log.v(TAG, userID);
-                removeNameToLookingForGameDB();
+//                removeNameToLookingForGameDB(userID);
+                finish();
+                System.exit(0);
 
             }
         });
     }
 
-    private void addNameToLookingForGameDB() {
-        HashMap<String, String> user = session.getUserDetails();
-        final String userID = user.get(SessionManager.KEY_NAME);
+    private void addNameToLookingForGameDB(final String userID) {
+//        private void addNameToLookingForGameDB() {
+//        HashMap<String, String> user = session.getUserDetails();
+//        final String userID = user.get(SessionManager.KEY_NAME);
         lookingforgameRef.runTransaction(new Transaction.Handler() {
             @NonNull
             @Override
@@ -90,11 +103,14 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+//        mDatabase = FirebaseDatabase.getInstance().getReference();
+//        mDatabase.child("lookingforgame").child("username").setValue(userID);
     }
 
-    private void removeNameToLookingForGameDB() {
-        HashMap<String, String> user = session.getUserDetails();
-        final String userID = user.get(SessionManager.KEY_NAME);
+    private void removeNameToLookingForGameDB(final String userID) {
+//        HashMap<String, String> user = session.getUserDetails();
+//        final String userID = user.get(SessionManager.KEY_NAME);
 
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
         Query userQuery = ref.child("lookingforgame").orderByChild("username").equalTo(userID);
@@ -115,5 +131,64 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
+    private void addNameToGameInProgressDB(final String userID_1,final String userID_2) {
+        gameInProgressRef.runTransaction(new Transaction.Handler() {
+            @NonNull
+            @Override
+            public Transaction.Result doTransaction(@NonNull MutableData mutableData) {
+                mutableData.child("username1").setValue(userID_1);
+                mutableData.child("username2").setValue(userID_2);
+                return Transaction.success(mutableData);
+            }
+
+            @Override
+            public void onComplete(@Nullable DatabaseError databaseError, boolean b, @Nullable DataSnapshot dataSnapshot) {
+
+            }
+        });
+
+
+    }
+
+    private void MatchMaking() {
+        final List<String> Mylist = new ArrayList<String>();
+
+        DatabaseReference rootref = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference playersRef = rootref.child("lookingforgame");
+
+        ValueEventListener valueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                long count = dataSnapshot.getChildrenCount();
+                Log.e(TAG, "count = " + count);
+                if (count >= 2){
+                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()){
+                        String tmp = userSnapshot.child("username").getValue(String.class);
+                        Mylist.add(tmp);
+                    }
+                    Log.e(TAG, Mylist.toString());
+                    // Adding the first user to the data base
+                    addNameToGameInProgressDB(Mylist.get(0),Mylist.get(1));
+                    removeNameToLookingForGameDB(Mylist.get(0));
+                    removeNameToLookingForGameDB(Mylist.get(1));
+                    Mylist.remove(0);
+                    Mylist.remove(0);
+                    Log.e(TAG, Mylist.toString());
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        };
+        playersRef.addListenerForSingleValueEvent(valueEventListener);
+
+    }
+
 
 }

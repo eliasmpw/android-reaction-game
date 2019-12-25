@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,6 +26,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -53,6 +55,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private Profile userProfile;
     private String userID;
     private Uri savedImageUri;
+    private boolean tmp = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,17 +133,51 @@ public class EditProfileActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+
+    private boolean checkForDuplicate() {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+        Query userQuery = ref.child("profiles").orderByChild("username").equalTo(userProfile.username);
+        userQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot data: dataSnapshot.getChildren()){
+                    Log.e(TAG, data.child("username").getValue() + userProfile.username );
+                    if (data.child("username").getValue().equals(userProfile.username)) {
+                        Toast.makeText(EditProfileActivity.this, R.string.duplicate_username, Toast
+                                .LENGTH_LONG).show();
+                        tmp = true;
+                        break;
+                    }
+                }
+            }
+
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e(TAG, "onCancelled", databaseError.toException());
+
+            }
+        });
+        Log.e(TAG,"THIS IS THE RETURNNNNNN " + tmp);
+        return tmp;
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_clear:
-                clearUser();
-                break;
             case R.id.action_validate:
                 editUser();
-                addProfileToFirebaseDB();
+                if (checkForDuplicate() == true) {
+                    Log.e(TAG, "INSIDE DUPLICATE!!!!!");
+                    break;
+                } else {
+                    Log.e(TAG, "INSIDE NOT DUPLICATE!!!!!");
+                    addProfileToFirebaseDB();
+                }
+
                 break;
         }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -261,6 +298,10 @@ public class EditProfileActivity extends AppCompatActivity {
             out.close();
         }
     }
+
+
+
+
 
     private class ProfileDataUploadHandler implements Transaction.Handler {
         @NonNull
