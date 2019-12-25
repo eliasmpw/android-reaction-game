@@ -27,11 +27,15 @@ public class LoginActivity extends AppCompatActivity {
 
     private Profile userProfile = null;
     private String userID;
+    SessionManager session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+
+
 
         Log.v(TAG, "Hello world!");
 
@@ -59,6 +63,7 @@ public class LoginActivity extends AppCompatActivity {
         final String passwordInput = ((EditText) findViewById(R.id.password))
                 .getText().toString();
 
+        session = new SessionManager(getApplicationContext());
         profileRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -81,9 +86,13 @@ public class LoginActivity extends AppCompatActivity {
                 } else {
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     intent.putExtra(MyProfileFragment.USER_ID, userID);
+                    session.createLoginSession(userID);
                     startActivity(intent);
                 }
             }
+
+
+
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
