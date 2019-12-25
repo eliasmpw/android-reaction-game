@@ -15,6 +15,10 @@
     <string name="user_profile_image">User profile image</string>
     <string name="missing_picture">You need to choose a profile picture!</string>
     <string name="photo_upload_failed">Failed uploading photo</string>
+    <string name="delete_history">Delete history</string>
+    <string name="play">Play</string>
+    <string name="logout">LogOut</string>
+    <string name="exit">Exit</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->
