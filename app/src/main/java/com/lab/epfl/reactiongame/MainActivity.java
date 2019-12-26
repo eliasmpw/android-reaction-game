@@ -28,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
     private static final FirebaseDatabase database = FirebaseDatabase.getInstance();
     private static final DatabaseReference lookingforgameGetRef = database.getReference("lookingforgame");
     private static DatabaseReference lookingforgameRef = lookingforgameGetRef.push();
+
+    Profile userProfile;
 //    private DatabaseReference mDatabase;
 
 
@@ -40,7 +42,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+//        Intent intent = getIntent();
+//        userProfile = (Profile) intent.getSerializableExtra("userProfileWelcome");
+//        sendProfileToWatch();
         session = new SessionManager(getApplicationContext());
         session.checkLogin();
         // get user data from session
@@ -190,6 +194,11 @@ public class MainActivity extends AppCompatActivity {
         playersRef.addListenerForSingleValueEvent(valueEventListener);
 
     }
-
+    private void sendProfileToWatch() {
+        Intent intentWear = new Intent(MainActivity.this,WearService.class);
+        intentWear.setAction(WearService.ACTION_SEND.PROFILE_SEND.name());
+        intentWear.putExtra(WearService.PROFILE, userProfile);
+        startService(intentWear);
+    }
 
 }
