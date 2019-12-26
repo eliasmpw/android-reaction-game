@@ -1,5 +1,6 @@
 package com.lab.epfl.reactiongame;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -25,7 +26,6 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     private final String TAG = this.getClass().getSimpleName();
     private static final FirebaseDatabase database = FirebaseDatabase.getInstance();
-
     private static final DatabaseReference lookingforgameGetRef = database.getReference("lookingforgame");
     private static DatabaseReference lookingforgameRef = lookingforgameGetRef.push();
 //    private DatabaseReference mDatabase;
@@ -49,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
         // name
         final String userID = user.get(SessionManager.KEY_NAME);
         Log.v(TAG, userID);
-
         Button playButton = findViewById(R.id.PlayButton);
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,8 +56,10 @@ public class MainActivity extends AppCompatActivity {
                 Log.v(TAG, "CLICKED PLAY BUTTON!!!!");
                 Log.v(TAG, userID);
                 addNameToLookingForGameDB(userID);
+                Intent loadingIntent = new Intent(MainActivity.this, LoadingActivity.class);
+                MainActivity.this.startActivity(loadingIntent);
                 MatchMaking();
-                // ADD HERE YOUR INTENT TO THE ACTIVITY OF GAME!!!!
+                MainActivity.this.finish();
             }
         });
 
