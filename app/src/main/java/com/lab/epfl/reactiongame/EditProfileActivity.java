@@ -41,6 +41,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EditProfileActivity extends AppCompatActivity {
 
@@ -134,46 +136,42 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
 
-    private boolean checkForDuplicate() {
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-        Query userQuery = ref.child("profiles").orderByChild("username").equalTo(userProfile.username);
-        userQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot data: dataSnapshot.getChildren()){
-                    Log.e(TAG, data.child("username").getValue() + userProfile.username );
-                    if (data.child("username").getValue().equals(userProfile.username)) {
-                        Toast.makeText(EditProfileActivity.this, R.string.duplicate_username, Toast
-                                .LENGTH_LONG).show();
-                        tmp = true;
-                        break;
-                    }
-                }
-            }
-
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.e(TAG, "onCancelled", databaseError.toException());
-
-            }
-        });
-        Log.e(TAG,"THIS IS THE RETURNNNNNN " + tmp);
-        return tmp;
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        final TextView usernameTextView = findViewById(R.id.editUsername);
         switch (item.getItemId()) {
             case R.id.action_validate:
                 editUser();
-                if (checkForDuplicate() == true) {
-                    Log.e(TAG, "INSIDE DUPLICATE!!!!!");
-                    break;
-                } else {
-                    Log.e(TAG, "INSIDE NOT DUPLICATE!!!!!");
-                    addProfileToFirebaseDB();
-                }
+                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+                databaseReference.child("profiles").orderByChild("username").equalTo(usernameTextView.getText().toString()).addListenerForSingleValueEvent(
+                        new ValueEventListener() {
+
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                Log.i(TAG, "dataSnapshot value = " + dataSnapshot.getValue());
+
+                                if (dataSnapshot.exists()) {
+
+                                    // User Exists
+                                    // Do your stuff here if user already exists
+                                    Toast.makeText(getApplicationContext(), "Username already exists. Please try other username.", Toast.LENGTH_SHORT).show();
+
+                                } else {
+
+                                    // User Not Yet Exists
+                                    // Do your stuff here if user not yet exists
+                                    addProfileToFirebaseDB();
+
+                                }
+                            }
+                            @Override
+                            public void onCancelled (DatabaseError databaseError){
+
+                            }
+                        }
+
+                );
 
                 break;
         }
@@ -182,12 +180,26 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     private void addProfileToFirebaseDB() {
+        final TextView userName = findViewById(R.id.editUsername);
+        final TextView userPassword = findViewById(R.id.editPassword);
+
         BitmapDrawable bitmapDrawable = (BitmapDrawable) ((ImageView) findViewById(R.id
                 .userImage)).getDrawable();
+
         if (bitmapDrawable == null) {
             Toast.makeText(this, R.string.missing_picture, Toast.LENGTH_SHORT).show();
             return;
         }
+
+        if (userName.getText().toString().equals("")) {
+            Toast.makeText(this, R.string.missing_username, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (userPassword.getText().toString().equals("")) {
+            Toast.makeText(this, R.string.missing_password, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         Bitmap bitmap = bitmapDrawable.getBitmap();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 90, baos);
@@ -300,9 +312,6 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
 
-
-
-
     private class ProfileDataUploadHandler implements Transaction.Handler {
         @NonNull
         @Override
@@ -331,6 +340,39 @@ public class EditProfileActivity extends AppCompatActivity {
         }
     }
 
+    private boolean checkForDuplicate(final String usernameToCheck) {
+        // Function to verify if the user with the same name is registered already
+        final List<String> userNamesRegistered = new ArrayList<>();
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+        Query userQuery = ref.child("profiles").orderByChild("username").equalTo(userProfile.username);
+        userQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
+                    Log.e(TAG, data.child("username").getValue() + " " + usernameToCheck);
+                    userNamesRegistered.add((String) data.child("username").getValue());
+                    Log.i(TAG, String.valueOf(userNamesRegistered));
+                    if (data.child("username").getValue().equals(usernameToCheck)) {
+                        Toast.makeText(EditProfileActivity.this, R.string.duplicate_username, Toast
+                                .LENGTH_LONG).show();
+                        Log.e(TAG, "SETTING THE TMP TO TRUE1!!!!");
+                        tmp = true;
+
+                    }
+                }
+            }
+
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e(TAG, "onCancelled", databaseError.toException());
+
+            }
+        });
+        Log.i(TAG, "THIS IS THE RETURNNNNNN " + tmp + userNamesRegistered);
+        return tmp;
+    }
+
     private class PhotoUploadSuccessListener implements
             OnSuccessListener<UploadTask.TaskSnapshot> {
         @Override
@@ -348,4 +390,5 @@ public class EditProfileActivity extends AppCompatActivity {
                             });
         }
     }
+
 }

@@ -14,6 +14,8 @@
     <string name="edit_profile">Edit profile</string>
     <string name="user_profile_image">User profile image</string>
     <string name="missing_picture">You need to choose a profile picture!</string>
+    <string name="missing_username">You need to enter a username!</string>
+    <string name="missing_password">You need to enter a password!</string>
     <string name="photo_upload_failed">Failed uploading photo</string>
     <string name="delete_history">Delete history</string>
     <string name="play">Play</string>
