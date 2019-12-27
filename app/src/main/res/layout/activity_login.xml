@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#000000"
     android:orientation="vertical">
 
     <Space
@@ -26,6 +27,7 @@
         android:autofillHints=""
         android:ems="10"
         android:hint="@string/username"
+        android:background="#AAFFFF"
         android:inputType="textPersonName" />
 
     <EditText
@@ -35,6 +37,7 @@
         android:autofillHints=""
         android:ems="10"
         android:hint="@string/password"
+        android:background="#AAFFAA"
         android:inputType="textPassword" />
 
     <TextView

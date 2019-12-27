@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#000000"
     tools:context=".EditProfileActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -12,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="32dp"
         android:layout_marginRight="32dp"
-        android:background="#eee"
+        android:background="#88888888"
         android:elevation="2dp"
         android:focusable="true"
         android:focusableInTouchMode="true"
@@ -36,7 +37,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:background="@android:color/holo_blue_light"
+            android:background="@android:color/black"
             android:contentDescription="@string/user_profile_image"
             android:scaleType="centerCrop"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -73,6 +74,7 @@
             android:maxLines="1"
             android:singleLine="true"
             android:textSize="24sp"
+            android:textColor="#FFFFFF"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -92,6 +94,7 @@
             android:maxLines="1"
             android:singleLine="true"
             android:textSize="24sp"
+            android:textColor="#FFFFFF"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"

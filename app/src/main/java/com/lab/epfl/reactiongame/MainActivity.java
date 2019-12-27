@@ -53,8 +53,47 @@ public class MainActivity extends AppCompatActivity {
         // name
         final String userID = user.get(SessionManager.KEY_NAME);
         Log.v(TAG, userID);
-        Button playButton = findViewById(R.id.PlayButton);
-        playButton.setOnClickListener(new View.OnClickListener() {
+        Button playButton1 = findViewById(R.id.PlayButton1);
+        playButton1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.v(TAG, "CLICKED PLAY BUTTON!!!!");
+                Log.v(TAG, userID);
+                addNameToLookingForGameDB(userID);
+                Intent loadingIntent = new Intent(MainActivity.this, LoadingActivity.class);
+                MainActivity.this.startActivity(loadingIntent);
+                MatchMaking();
+                MainActivity.this.finish();
+            }
+        });
+        Button playButton2 = findViewById(R.id.PlayButton2);
+        playButton2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.v(TAG, "CLICKED PLAY BUTTON!!!!");
+                Log.v(TAG, userID);
+                addNameToLookingForGameDB(userID);
+                Intent loadingIntent = new Intent(MainActivity.this, LoadingActivity.class);
+                MainActivity.this.startActivity(loadingIntent);
+                MatchMaking();
+                MainActivity.this.finish();
+            }
+        });
+        Button playButton3 = findViewById(R.id.PlayButton3);
+        playButton3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.v(TAG, "CLICKED PLAY BUTTON!!!!");
+                Log.v(TAG, userID);
+                addNameToLookingForGameDB(userID);
+                Intent loadingIntent = new Intent(MainActivity.this, LoadingActivity.class);
+                MainActivity.this.startActivity(loadingIntent);
+                MatchMaking();
+                MainActivity.this.finish();
+            }
+        });
+        Button playButton4 = findViewById(R.id.PlayButton4);
+        playButton4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.v(TAG, "CLICKED PLAY BUTTON!!!!");
