@@ -35,6 +35,9 @@ public class MainActivity extends AppCompatActivity {
 
     private static final DatabaseReference gameInProgressGetRef = database.getReference("gameinprogress");
     private static DatabaseReference gameInProgressRef = gameInProgressGetRef.push();
+
+    private static final DatabaseReference highScoresGetRef = database.getReference("highscores");
+    private static DatabaseReference highScoresRef = highScoresGetRef.push();
     SessionManager session;
 //    private Profile userProfile;
 
@@ -106,6 +109,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Button scoresButton = findViewById(R.id.scoresButton);
+        scoresButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.v(TAG, userID);
+                Intent scoresIntent = new Intent(MainActivity.this, ScoresActivity.class);
+                MainActivity.this.startActivity(scoresIntent);
+                MatchMaking();
+                MainActivity.this.finish();
+            }
+        });
+
 
         Button logoutButton = findViewById(R.id.LogoutButton);
         logoutButton.setOnClickListener(new View.OnClickListener() {
@@ -123,8 +138,9 @@ public class MainActivity extends AppCompatActivity {
                 Log.v(TAG, "CLICKED exitButton BUTTON!!!!");
                 Log.v(TAG, userID);
 //                removeNameToLookingForGameDB(userID);
-                finish();
-                System.exit(0);
+                CreateHighScoreDB(userID);
+//                finish();
+//                System.exit(0);
 
             }
         });
@@ -240,4 +256,22 @@ public class MainActivity extends AppCompatActivity {
         startService(intentWear);
     }
 
+
+    private void CreateHighScoreDB(final String userID_1) {
+        highScoresRef.runTransaction(new Transaction.Handler() {
+            @NonNull
+            @Override
+            public Transaction.Result doTransaction(@NonNull MutableData mutableData) {
+                mutableData.child("userID").setValue(userID_1);
+                mutableData.child("username").setValue("Jhon");
+                mutableData.child("score").setValue("123");
+                return Transaction.success(mutableData);
+            }
+
+            @Override
+            public void onComplete(@Nullable DatabaseError databaseError, boolean b, @Nullable DataSnapshot dataSnapshot) {
+
+            }
+        });
+    }
 }

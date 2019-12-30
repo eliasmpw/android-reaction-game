@@ -24,6 +24,7 @@
     <string name="pick_image">Pick Image</string>
     <string name="duplicate_username">Sorry the username already exists</string>
     <string name="ok_username">Great User Name =)</string>
+    <string name="highscores">HIGHSCORES</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

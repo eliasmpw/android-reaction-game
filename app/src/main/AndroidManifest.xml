@@ -12,6 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".ScoresActivity"></activity>
         <activity android:name=".GameActivity" />
         <activity android:name=".LoadingActivity" />
         <activity android:name=".EditProfileActivity" />
@@ -23,9 +24,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <service android:name=".WearService">
             <intent-filter>
                 <action android:name="com.google.android.gms.wearable.DATA_CHANGED" />
+
                 <data
                     android:host="*"
                     android:pathPrefix=""
@@ -33,6 +36,7 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
+
                 <data
                     android:host="*"
                     android:pathPrefix=""
