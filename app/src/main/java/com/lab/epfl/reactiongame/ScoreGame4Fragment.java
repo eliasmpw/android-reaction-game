@@ -32,8 +32,8 @@ import java.util.List;
  */
 public class ScoreGame4Fragment extends Fragment {
     private final String TAG = this.getClass().getSimpleName();
-    final List<String> nameList = new ArrayList<String>();
-    final List<String> scoresList = new ArrayList<String>();
+    private final List<String> nameList4 = new ArrayList<String>();
+    private final List<String> scoresList4 = new ArrayList<String>();
     private static final FirebaseDatabase database = FirebaseDatabase.getInstance();
     private static final DatabaseReference highScoresGetRef = database.getReference("highscores");
     private static DatabaseReference highScoresRef = highScoresGetRef.push();
@@ -97,7 +97,7 @@ public class ScoreGame4Fragment extends Fragment {
         fragmentView = inflater.inflate(R.layout.fragment_score_game4, container, false);
         getScores();
 //        TextView third = fragmentView.findViewById(R.id.ThirdPlace);
-//        third.setText(nameList.get(2));
+//        third.setText(nameList4.get(2));
 //        third.setText("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 //        Log.i(TAG, "THIS IS THE aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 
@@ -158,27 +158,27 @@ public class ScoreGame4Fragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot userSnapshot : dataSnapshot.getChildren()){
                     String tmpName = userSnapshot.child("username").getValue(String.class);
-                    nameList.add(tmpName);
+                    nameList4.add(tmpName);
                     String tmpScore = userSnapshot.child("score").getValue(String.class);
-                    scoresList.add(tmpScore);
+                    scoresList4.add(tmpScore);
                 }
-                Log.i(TAG, "THIS IS THE TAGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG" + nameList.toString());
-                Log.i(TAG, "THIS IS THE TAGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG" + scoresList.toString());
+                Log.i(TAG, "THIS IS THE TAGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG" + nameList4.toString());
+                Log.i(TAG, "THIS IS THE TAGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG" + scoresList4.toString());
                 TextView first = fragmentView.findViewById(R.id.firstPlace);
-                first.setText(nameList.get(0));
+                first.setText(nameList4.get(0));
                 TextView firstScore = fragmentView.findViewById(R.id.firstPlaceScore);
-                firstScore.setText(scoresList.get(0));
+                firstScore.setText(scoresList4.get(0));
 
 
                 TextView second = fragmentView.findViewById(R.id.SecondPlace);
-                second.setText(nameList.get(1));
+                second.setText(nameList4.get(1));
                 TextView secondScore = fragmentView.findViewById(R.id.SecondPlaceScore);
-                secondScore.setText(scoresList.get(1));
+                secondScore.setText(scoresList4.get(1));
 
                 TextView third = fragmentView.findViewById(R.id.ThirdPlace);
-                third.setText(nameList.get(2));
+                third.setText(nameList4.get(2));
                 TextView thirdScore = fragmentView.findViewById(R.id.ThirdPlaceScore);
-                thirdScore.setText(scoresList.get(2));
+                thirdScore.setText(scoresList4.get(2));
             }
 
             @Override
