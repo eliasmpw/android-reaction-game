@@ -59,7 +59,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="76dp"
         android:text="play game 4"
-        android:onClick="ClickedStartGame4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.521"
         app:layout_constraintStart_toEndOf="@+id/PlayButton2"

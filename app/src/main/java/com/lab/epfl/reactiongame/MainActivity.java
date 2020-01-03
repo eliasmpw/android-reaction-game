@@ -99,11 +99,11 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Log.v(TAG, "CLICKED PLAY BUTTON!!!!");
                 Log.v(TAG, userID);
-                addNameToLookingForGameDB(userID);
-                Intent loadingIntent = new Intent(MainActivity.this, LoadingActivity.class);
+                //addNameToLookingForGameDB(userID);
+                Intent loadingIntent = new Intent(MainActivity.this, GameFourActivity.class);
                 MainActivity.this.startActivity(loadingIntent);
-                MatchMaking();
-                MainActivity.this.finish();
+                //MatchMaking();
+                //MainActivity.this.finish();
             }
         });
 
@@ -272,10 +272,5 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-    }
-    public void ClickedStartGame4(View view){
-        Intent intent = new Intent(MainActivity.this,game4Activity.class);
-        startActivity(intent);
-        finish();
     }
 }

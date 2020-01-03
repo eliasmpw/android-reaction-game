@@ -64,7 +64,7 @@ public class GameChooseActivity extends AppCompatActivity {
         // TODO load player number from previous activity
         playerNumber = 2;
         // TODO load game type from previous activity
-        gameType = 2;
+        gameType = 1;
         // TODO load Game Id from previous activity
         gameId = "-Lx80-WL0iPBp-6QkGrG";
 
@@ -116,6 +116,7 @@ public class GameChooseActivity extends AppCompatActivity {
         ValueEventListener gameListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
                 Log.e(TAG, "DATA RECEIVED: " + dataSnapshot.toString());
                 // Get Post object and use the values to update the UI
                 game = dataSnapshot.getValue(GameChoose.class);
