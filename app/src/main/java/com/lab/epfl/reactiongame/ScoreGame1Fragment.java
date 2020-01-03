@@ -165,8 +165,8 @@ public class ScoreGame1Fragment extends Fragment {
                 Log.i(TAG, "THIS IS THE TAGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG" + nameList1.toString());
                 Log.i(TAG, "THIS IS THE TAGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG" + scoresList1.toString());
 
-                TextView title = fragmentView.findViewById(R.id.textViewGameID);
-                title.setText("Game 1");
+//                TextView title = fragmentView.findViewById(R.id.textViewGameID);
+//                title.setText("Game 1");
                 TextView first = fragmentView.findViewById(R.id.firstPlace);
                 first.setText(nameList1.get(0));
                 TextView firstScore = fragmentView.findViewById(R.id.firstPlaceScore);

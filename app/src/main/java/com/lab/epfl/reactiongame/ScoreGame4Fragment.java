@@ -164,8 +164,8 @@ public class ScoreGame4Fragment extends Fragment {
                 }
                 Log.i(TAG, "THIS IS THE TAGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG" + nameList4.toString());
                 Log.i(TAG, "THIS IS THE TAGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG" + scoresList4.toString());
-                TextView title = fragmentView.findViewById(R.id.textViewGameID);
-                title.setText("Game 4");
+//                TextView title = fragmentView.findViewById(R.id.textViewGameID);
+//                title.setText("Game 4");
 
                 TextView first = fragmentView.findViewById(R.id.firstPlace);
                 first.setText(nameList4.get(0));
