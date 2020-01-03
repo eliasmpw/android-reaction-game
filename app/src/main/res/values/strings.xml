@@ -32,4 +32,14 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="MyScoreText">My Score</string>
+    <string name="OpponentScoreText">Opponent Score:</string>
+    <string name="WaitingOpponentText">Waiting for opponent...</string>
+    <string name="GetReady">Get Ready!</string>
+    <string name="PointYou">Point for you!</string>
+    <string name="PointOpponent">Point for opponent</string>
+    <string name="GameTimeText">Time:</string>
+    <string name="TotalTimeText">My total time:</string>
+    <string name="Correct">Correct!</string>
+    <string name="Wrong">Wrong! (Time penalization)</string>
 </resources>
