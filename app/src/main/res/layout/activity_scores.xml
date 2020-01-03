@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.viewpager.widget.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mainViewPager"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.viewpager.widget.PagerTabStrip
+        android:id="@+id/pagerTabStrip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:background="#20B2AA"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:textColor="#fff" />
+
+</androidx.viewpager.widget.ViewPager>
+
+
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<RelativeLayout-->
+<!--    xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    android:orientation="vertical"-->
+<!--    android:layout_width="fill_parent"-->
+<!--    android:layout_height="fill_parent"-->
+<!--    >-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/firstPlace"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignParentLeft="true"-->
+<!--        android:layout_alignParentTop="true"-->
+<!--        android:layout_marginLeft="24dp"-->
+<!--        android:layout_marginTop="37dp"-->
+<!--        android:text="1ST" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/firstPlaceScore"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignTop="@+id/firstPlace"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:text="Points"-->
+<!--        android:textAppearance="?android:attr/textAppearanceLarge" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/SecondPlace"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignLeft="@+id/firstPlace"-->
+<!--        android:layout_below="@+id/firstPlaceScore"-->
+<!--        android:layout_marginTop="34dp"-->
+<!--        android:text="2ND" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/SecondPlaceScore"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignLeft="@+id/firstPlaceScore"-->
+<!--        android:layout_alignTop="@+id/SecondPlace"-->
+<!--        android:layout_marginLeft="14dp"-->
+<!--        android:text="Points"-->
+<!--        android:textAppearance="?android:attr/textAppearanceLarge" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/ThirdPlace"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignLeft="@+id/SecondPlace"-->
+<!--        android:layout_below="@+id/SecondPlaceScore"-->
+<!--        android:layout_marginTop="34dp"-->
+<!--        android:text="3RD" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/ThirdPlaceScore"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignLeft="@+id/SecondPlaceScore"-->
+<!--        android:layout_alignTop="@+id/ThirdPlace"-->
+<!--        android:text="Points"-->
+<!--        android:textAppearance="?android:attr/textAppearanceLarge" />-->
+
+<!--</RelativeLayout>-->
