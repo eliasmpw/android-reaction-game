@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "445749058426",
+    "firebase_url": "https://reactiongame-658e1.firebaseio.com",
+    "project_id": "reactiongame-658e1",
+    "storage_bucket": "reactiongame-658e1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:445749058426:android:f06eb2b650c3026b7114c3",
+        "android_client_info": {
+          "package_name": "com.lab.epfl.reactiongame"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "445749058426-kieanhdldach6q5pqp8u489l64ns4gt2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.lab.epfl.reactiongame",
+            "certificate_hash": "668655110c591472addf99ceb769e72186c3c8ff"
+          }
+        },
+        {
+          "client_id": "445749058426-8f1ko8mhejfcb6r7hgdn4dvqt79l1dmf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3lIYsmu8ZR_XYUs18StdUvcKqoyOePxI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "445749058426-8f1ko8mhejfcb6r7hgdn4dvqt79l1dmf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
