@@ -39,6 +39,7 @@ public class GameActivity extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
         } else {    // this guy is serious
             // clean up
+            GameActivity.this.finish();
             super.onBackPressed();       // bye
         }
     }

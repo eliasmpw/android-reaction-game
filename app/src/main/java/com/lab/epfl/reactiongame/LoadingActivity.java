@@ -321,6 +321,8 @@ public class LoadingActivity extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
         } else {    // this guy is serious
             // clean up
+            removeNameToLookingForGameDB(userID, lookingforgame + gameType);
+            removeValueEventListener(listenerHashMap, queryHashMap);
             super.onBackPressed();       // bye
         }
     }
