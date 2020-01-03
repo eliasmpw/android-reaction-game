@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final DatabaseReference highScoresGetRef = database.getReference("highscores");
     private static DatabaseReference highScoresRef = highScoresGetRef.push();
+    private String newGameId;
     SessionManager session;
 //    private Profile userProfile;
 
@@ -62,11 +63,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Log.v(TAG, "CLICKED PLAY BUTTON!!!!");
                 Log.v(TAG, userID);
-                addNameToLookingForGameDB(userID);
-                Intent loadingIntent = new Intent(MainActivity.this, LoadingActivity.class);
+                Intent loadingIntent = new Intent(MainActivity.this, GameChooseActivity.class);
                 MainActivity.this.startActivity(loadingIntent);
-                MatchMaking();
-                MainActivity.this.finish();
             }
         });
         Button playButton2 = findViewById(R.id.PlayButton2);
@@ -205,7 +203,8 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onComplete(@Nullable DatabaseError databaseError, boolean b, @Nullable DataSnapshot dataSnapshot) {
-
+                Log.e(TAG, dataSnapshot.toString());
+                newGameId = dataSnapshot.getKey();
             }
         });
 

@@ -25,6 +25,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+import static java.lang.Math.abs;
+
 public class GameChooseActivity extends AppCompatActivity {
     private final String TAG = this.getClass().getSimpleName();
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -60,9 +62,9 @@ public class GameChooseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // TODO load player number from previous activity
-        playerNumber = 1;
+        playerNumber = 2;
         // TODO load game type from previous activity
-        gameType = 1;
+        gameType = 2;
         // TODO load Game Id from previous activity
         gameId = "-Lx80-WL0iPBp-6QkGrG";
 
@@ -70,10 +72,17 @@ public class GameChooseActivity extends AppCompatActivity {
 
         setInitialVariables();
 
+//        // TODO remove hard reset
+//        GameChoose tempGame = new GameChoose();
+//        dataGameRef.setValue()
+
         ValueEventListener createdOnListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.getValue() != null && (long) dataSnapshot.getValue() != 0) {
+                    if (startedGame) {
+                        waitingForOponent = false;
+                    }
                     startedGame = true;
                 }
             }
@@ -137,9 +146,11 @@ public class GameChooseActivity extends AppCompatActivity {
                     } else {
                         if (myResponseIsReady) {
                             if (game.points1 >= 5) {
+                                Log.e(TAG, "Player 1 WINS");
                                 Toast.makeText(getApplicationContext(), playerNumber == 1 ? "You win" : "You Lose", Toast.LENGTH_LONG);
                                 finish();
                             } else if (game.points2 >= 5) {
+                                Log.e(TAG, "Player 2 WINS");
                                 Toast.makeText(getApplicationContext(), playerNumber == 2 ? "You win" : "You Lose", Toast.LENGTH_LONG);
                                 finish();
                             } else {
@@ -201,25 +212,25 @@ public class GameChooseActivity extends AppCompatActivity {
 
             public void onTick(long millisUntilFinished) {
                 TextView subtitle = findViewById(R.id.Subtitle);
-                subtitle.setText(Long.toString(millisUntilFinished / 1000));
+                subtitle.setText("Next question in: " + Long.toString(millisUntilFinished / 1000));
             }
 
             public void onFinish() {
                 TextView question = findViewById(R.id.Question);
                 question.setText(game.question);
-                question.setTextColor(Color.BLACK);
+                question.setTextColor(Color.WHITE);
                 TextView subtitle = findViewById(R.id.Subtitle);
                 subtitle.setText("");
                 switch (gameType) {
                     case 0:
-                        for (int i = 0; i < 10; i++) {
+                        for (int i = 0; i < 9; i++) {
                             Button auxButton = findViewById(fieldIDs.get(i));
                             auxButton.setText(game.answers.get("+" + i).text);
                             auxButton.setClickable(true);
                         }
                         break;
                     case 1:
-                        for (int i = 0; i < 10; i++) {
+                        for (int i = 0; i < 9; i++) {
                             Button auxButton = findViewById(fieldIDs.get(i));
                             auxButton.setText(game.answers.get("+" + i).text);
                             auxButton.setTextColor(mapStringToResource.get(game.answers.get("+" + i).color));
@@ -227,7 +238,7 @@ public class GameChooseActivity extends AppCompatActivity {
                         }
                         break;
                     case 2:
-                        for (int i = 0; i < 10; i++) {
+                        for (int i = 0; i < 9; i++) {
                             Button auxButton = findViewById(fieldIDs.get(i));
                             auxButton.setText("");
                             auxButton.setBackgroundResource(mapStringToResource.get(game.answers.get("+" + i).image));
@@ -245,7 +256,7 @@ public class GameChooseActivity extends AppCompatActivity {
         switch (gameType) {
             case 0:
                 Random r = new Random();
-                for (int i = 0; i < 10; i++) {
+                for (int i = 0; i < 9; i++) {
                     answers.add(new GameOption(null, Integer.toString(r.nextInt(90) + 10), null));
                 }
                 break;
@@ -257,7 +268,7 @@ public class GameChooseActivity extends AppCompatActivity {
                 Collections.shuffle(auxList);
                 List<String> secondAuxList = Arrays.asList(secondAuxArray);
                 Collections.shuffle(secondAuxList);
-                for (int i = 0; i < 10; i++) {
+                for (int i = 0; i < 9; i++) {
                     answers.add(new GameOption(auxList.get(i), secondAuxList.get(i), null));
                 }
                 break;
@@ -266,7 +277,7 @@ public class GameChooseActivity extends AppCompatActivity {
                 mapStringToResource.keySet().toArray(auxImageArray);
                 List<String> auxImageList = Arrays.asList(auxImageArray);
                 Collections.shuffle(auxImageList);
-                for (int i = 0; i < 10; i++) {
+                for (int i = 0; i < 9; i++) {
                     answers.add(new GameOption(null, null, auxImageList.get(i)));
                 }
                 break;
@@ -277,7 +288,7 @@ public class GameChooseActivity extends AppCompatActivity {
     private void setAnswers(ArrayList<GameOption> auxAnswers) {
         Random r = new Random();
         game.correctAnswer = r.nextInt(9);
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 9; i++) {
             game.answers.put("+" + i, auxAnswers.get(i));
         }
         switch (gameType) {
@@ -291,7 +302,7 @@ public class GameChooseActivity extends AppCompatActivity {
                     var2 = r.nextInt(10) + 1;
                 }
                 var3 = auxCorrectAnswer - (var1 * var2);
-                game.question = "" +  var1 + " x " + var2 + (var3 >= 0 ? " + " : " - ") + var3;
+                game.question = "" +  var1 + " x " + var2 + (var3 >= 0 ? " + " : " - ") + abs(var3);
                 break;
             case 1:
                 game.question = auxAnswers.get(game.correctAnswer).color;
@@ -346,7 +357,7 @@ public class GameChooseActivity extends AppCompatActivity {
                 game.points1++;
             } else {
                 game.lastWinner = 2;
-                game.points1++;
+                game.points2++;
             }
             game.questionCreatedOn = System.currentTimeMillis();
             game.time1 += game.questionTimePlayer1;
@@ -416,7 +427,7 @@ public class GameChooseActivity extends AppCompatActivity {
         myResponseIsReady = true;
 
         switch (gameType) {
-            case 0:
+            case 2:
                 mapStringToResource = new HashMap<>();
                 mapStringToResource.put("Antelope", getResources().getIdentifier("animalsantelope", "drawable", getPackageName()));
                 mapStringToResource.put("Bat", getResources().getIdentifier("animalsbat", "drawable", getPackageName()));
@@ -464,7 +475,7 @@ public class GameChooseActivity extends AppCompatActivity {
                 mapStringToResource.put("Purple", Color.rgb(73, 0, 153));
                 mapStringToResource.put("Gray", Color.rgb(160, 160, 160));
                 break;
-            case 2:
+            default:
                 break;
         }
     }
