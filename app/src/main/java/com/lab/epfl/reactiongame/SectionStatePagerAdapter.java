@@ -48,3 +48,5 @@ class SectionsStatePagerAdapter extends FragmentStatePagerAdapter {
         return mFragmentTitleList.get(position);
     }
 }
+
+

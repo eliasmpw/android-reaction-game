@@ -1,65 +1,180 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:background="#000000"
     >
 
-    <TextView
-        android:id="@+id/firstPlace"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="24dp"
-        android:layout_marginTop="37dp"
-        android:text="1ST" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/firstPlaceScore"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/firstPlace"
-        android:layout_centerHorizontal="true"
-        android:text="Points"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        <TextView
+            android:id="@+id/firstPlace"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="45dp"
+            android:layout_marginEnd="41dp"
+            android:text="1ST"
+            app:layout_constraintBottom_toTopOf="@+id/SecondPlace"
+            app:layout_constraintEnd_toStartOf="@+id/firstPlaceScore"
+            app:layout_constraintHorizontal_bias="0.385"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:textColor="#ff0000"
+            app:layout_constraintVertical_bias="0.488" />
 
-    <TextView
-        android:id="@+id/SecondPlace"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/firstPlace"
-        android:layout_below="@+id/firstPlaceScore"
-        android:layout_marginTop="34dp"
-        android:text="2ND" />
+        <TextView
+            android:id="@+id/firstPlaceScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="152dp"
+            android:layout_marginEnd="80dp"
+            android:text="Points"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            app:layout_constraintBottom_toTopOf="@+id/SecondPlace"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.988"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:textColor="#ff0000"
+            app:layout_constraintVertical_bias="0.0" />
 
-    <TextView
-        android:id="@+id/SecondPlaceScore"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/firstPlaceScore"
-        android:layout_alignTop="@+id/SecondPlace"
-        android:layout_marginLeft="14dp"
-        android:text="Points"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        <TextView
+            android:id="@+id/SecondPlace"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginBottom="49dp"
+            android:text="2ND"
+            app:layout_constraintBottom_toTopOf="@+id/ThirdPlace"
+            app:layout_constraintStart_toStartOf="@+id/ThirdPlace"
+            app:layout_constraintTop_toTopOf="parent"
+            android:textColor="#ff0000"
 
-    <TextView
-        android:id="@+id/ThirdPlace"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/SecondPlace"
-        android:layout_below="@+id/SecondPlaceScore"
-        android:layout_marginTop="34dp"
-        android:text="3RD" />
+            app:layout_constraintVertical_bias="0.844" />
 
-    <TextView
-        android:id="@+id/ThirdPlaceScore"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/SecondPlaceScore"
-        android:layout_alignTop="@+id/ThirdPlace"
-        android:text="Points"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        <TextView
+            android:id="@+id/SecondPlaceScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="80dp"
+            android:text="Points"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            app:layout_constraintBottom_toBottomOf="@+id/SecondPlace"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.982"
+            app:layout_constraintStart_toEndOf="@+id/SecondPlace"
+            app:layout_constraintTop_toBottomOf="@+id/firstPlaceScore"
+            android:textColor="#ff0000"
+
+            app:layout_constraintVertical_bias="1.0" />
+
+        <TextView
+            android:id="@+id/ThirdPlace"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="76dp"
+            android:layout_marginBottom="304dp"
+            android:text="3RD"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            android:textColor="#ff0000"
+
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/forthPlace"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="76dp"
+            android:layout_marginBottom="216dp"
+            android:text="4th"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ThirdPlace"
+            android:textColor="#ff0000"
+
+            app:layout_constraintVertical_bias="1.0" />
+
+        <TextView
+            android:id="@+id/fifthPlace"
+            android:layout_width="15dp"
+            android:layout_height="17dp"
+            android:layout_marginStart="76dp"
+            android:text="5th"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.012"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/forthPlace"
+            android:textColor="#ff0000"
+
+            app:layout_constraintVertical_bias="0.497" />
+
+        <TextView
+            android:id="@+id/ThirdPlaceScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="102dp"
+            android:text="Points"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            app:layout_constraintEnd_toEndOf="@+id/SecondPlaceScore"
+            app:layout_constraintStart_toStartOf="@+id/SecondPlaceScore"
+            android:textColor="#ff0000"
+
+            app:layout_constraintTop_toBottomOf="@+id/SecondPlaceScore" />
+
+        <TextView
+            android:id="@+id/forthPlaceScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="188dp"
+            android:text="Points"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            app:layout_constraintEnd_toEndOf="@+id/SecondPlaceScore"
+            app:layout_constraintHorizontal_bias="1.0"
+            android:textColor="#ff0000"
+
+            app:layout_constraintStart_toStartOf="@+id/SecondPlaceScore"
+            app:layout_constraintTop_toBottomOf="@+id/SecondPlaceScore" />
+
+        <TextView
+            android:id="@+id/fifthPlaceScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="308dp"
+            android:text="Points"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/SecondPlaceScore"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/SecondPlaceScore"
+            app:layout_constraintTop_toBottomOf="@+id/SecondPlaceScore"
+            android:textColor="#ff0000"
+
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/textViewGameID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="GameID"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:textColor="#ffffff"
+            android:textSize="26sp"
+
+            app:layout_constraintVertical_bias="0.078" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </RelativeLayout>

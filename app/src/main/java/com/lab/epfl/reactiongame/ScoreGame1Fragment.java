@@ -164,6 +164,9 @@ public class ScoreGame1Fragment extends Fragment {
                 }
                 Log.i(TAG, "THIS IS THE TAGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG" + nameList1.toString());
                 Log.i(TAG, "THIS IS THE TAGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG" + scoresList1.toString());
+
+                TextView title = fragmentView.findViewById(R.id.textViewGameID);
+                title.setText("Game 1");
                 TextView first = fragmentView.findViewById(R.id.firstPlace);
                 first.setText(nameList1.get(0));
                 TextView firstScore = fragmentView.findViewById(R.id.firstPlaceScore);
@@ -179,6 +182,16 @@ public class ScoreGame1Fragment extends Fragment {
                 third.setText(nameList1.get(2));
                 TextView thirdScore = fragmentView.findViewById(R.id.ThirdPlaceScore);
                 thirdScore.setText(scoresList1.get(2));
+
+                TextView forth = fragmentView.findViewById(R.id.forthPlace);
+                forth.setText(nameList1.get(3));
+                TextView forthScore = fragmentView.findViewById(R.id.firstPlaceScore);
+                forthScore.setText(scoresList1.get(3));
+
+                TextView fifth = fragmentView.findViewById(R.id.fifthPlace);
+                fifth.setText(nameList1.get(4));
+                TextView fifthScore = fragmentView.findViewById(R.id.firstPlaceScore);
+                fifthScore.setText(scoresList1.get(4));
             }
 
             @Override
