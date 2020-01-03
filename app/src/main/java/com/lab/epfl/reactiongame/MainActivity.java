@@ -274,4 +274,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+    public void ClickedStartGame4(View view){
+        Intent intent = new Intent(MainActivity.this,game4Activity.class);
+        startActivity(intent);
+        finish();
+    }
 }

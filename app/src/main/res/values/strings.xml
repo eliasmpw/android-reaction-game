@@ -25,6 +25,10 @@
     <string name="duplicate_username">Sorry the username already exists</string>
     <string name="ok_username">Great User Name =)</string>
     <string name="highscores">HIGHSCORES</string>
+    <string name="tab_title_score_game_1">Scores Game 1</string>
+    <string name="tab_title_score_game_2">Scores Game 2</string>
+    <string name="tab_title_score_game_3">Scores Game 3</string>
+    <string name="tab_title_score_game_4">Scores Game 4</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

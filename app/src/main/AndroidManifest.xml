@@ -18,6 +18,9 @@
         <activity android:name=".LoadingActivity" />
         <activity android:name=".EditProfileActivity" />
         <activity android:name=".LoginActivity" />
+
+        <activity android:name=".WinLoseActivity" />
+        <activity android:name=".game4Activity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
