@@ -1,4 +1,4 @@
-package com.lab.epfl.reactiongame;
+package com.example.wear;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -19,12 +19,12 @@ import com.google.android.gms.wearable.DataClient;
 import com.google.android.gms.wearable.DataEvent;
 import com.google.android.gms.wearable.DataEventBuffer;
 import com.google.android.gms.wearable.DataItem;
+import com.google.android.gms.wearable.DataMap;
 import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.PutDataRequest;
-import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.WearableListenerService;
 
 import java.io.ByteArrayOutputStream;
@@ -32,6 +32,10 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import static com.google.android.gms.wearable.Wearable.getDataClient;
+import static com.google.android.gms.wearable.Wearable.getMessageClient;
+import static com.google.android.gms.wearable.Wearable.getNodeClient;
 
 public class WearService extends WearableListenerService {
 
@@ -69,12 +73,6 @@ public class WearService extends WearableListenerService {
                 putDataMapRequest.getDataMap().putAsset(BuildConfig.W_some_other_key, (Asset) intent.getParcelableExtra(IMAGE));
                 sendPutDataMapRequest(putDataMapRequest);
                 break;
-            case PROFILE_SEND:
-                putDataMapRequest = PutDataMapRequest.create(BuildConfig.W_profile_path);
-                Profile userProfile = (Profile) intent.getSerializableExtra(PROFILE);
-                putDataMapRequest.getDataMap().putDataMap(BuildConfig.W_profile_key, userProfile.toDataMap());
-                sendPutDataMapRequest(putDataMapRequest);
-                break;
             default:
                 Log.w(TAG, "Unknown action");
                 break;
@@ -90,7 +88,6 @@ public class WearService extends WearableListenerService {
     public static final String DATAMAP_INT_ARRAYLIST = "DATAMAP_INT_ARRAYLIST";
     public static final String IMAGE = "IMAGE";
     public static final String PATH = "PATH";
-    public static final String PROFILE = "PROFILE";
 
     public static Asset createAssetFromBitmap(Bitmap bitmap) {
         bitmap = resizeImage(bitmap, 390);
@@ -179,8 +176,17 @@ public class WearService extends WearableListenerService {
                         intent.putExtra("REPLACE_THIS_WITH_A_STRING_OF_ARRAYLIST_PREFERABLY_DEFINED_AS_A_CONSTANT_IN_TARGET_ACTIVITY", arraylist);
                         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
                         break;
+                    case BuildConfig.W_profile_path:
+                        Log.v(TAG,"Data changed for path: " + uri);
+                        DataMap dataMap = dataMapItem.getDataMap().getDataMap(BuildConfig.W_profile_key);
+                        String username = dataMap.getString("username");
+                        intent = new Intent(MainActivity.ACTION_RECEIVE_PROFILE_INFO);
+                        intent.putExtra(MainActivity.PROFILE_USERNAME,username);
+                        bitmapFromAsset(dataMap.getAsset("photo"),intent,MainActivity.PROFILE_IMAGE);
+                        break;
                     default:
                         Log.v(TAG, "Data changed for unhandled path: " + uri);
+                        Log.v(TAG,BuildConfig.W_profile_path);
                         break;
                 }
             } else if (event.getType() == DataEvent.TYPE_DELETED) {
@@ -244,7 +250,7 @@ public class WearService extends WearableListenerService {
 
     private void sendMessage(String message, String path, final String nodeId) {
         // Sends a message through the Wear API
-        Wearable.getMessageClient(this)
+        getMessageClient(this)
                 .sendMessage(nodeId, path, message.getBytes())
                 .addOnSuccessListener(new OnSuccessListener<Integer>() {
                     @Override
@@ -268,7 +274,7 @@ public class WearService extends WearableListenerService {
     void sendMessageToNodes(final String message, final String path) {
         Log.v(TAG, "Sending message " + message);
         // Lists all the nodes (devices) connected to the Wear API
-        Wearable.getNodeClient(this).getConnectedNodes().addOnCompleteListener(new OnCompleteListener<List<Node>>() {
+        getNodeClient(this).getConnectedNodes().addOnCompleteListener(new OnCompleteListener<List<Node>>() {
             @Override
             public void onComplete(@NonNull Task<List<Node>> listTask) {
                 List<Node> nodes = listTask.getResult();
@@ -284,7 +290,7 @@ public class WearService extends WearableListenerService {
         putDataMapRequest.getDataMap().putLong("time", System.nanoTime());
         PutDataRequest request = putDataMapRequest.asPutDataRequest();
         request.setUrgent();
-        Wearable.getDataClient(this)
+        getDataClient(this)
                 .putDataItem(request)
                 .addOnSuccessListener(new OnSuccessListener<DataItem>() {
                     @Override
@@ -307,7 +313,7 @@ public class WearService extends WearableListenerService {
         }
 
         // Convert asset and convert it back to an image
-        Wearable.getDataClient(this).getFdForAsset(asset)
+        getDataClient(this).getFdForAsset(asset)
                 .addOnCompleteListener(new OnCompleteListener<DataClient.GetFdForAssetResponse>() {
                     @Override
                     public void onComplete(@NonNull Task<DataClient.GetFdForAssetResponse> runnable) {
@@ -332,6 +338,6 @@ public class WearService extends WearableListenerService {
 
     // Constants
     public enum ACTION_SEND {
-        STARTACTIVITY, MESSAGE, EXAMPLE_DATAMAP, EXAMPLE_ASSET, PROFILE_SEND
+        STARTACTIVITY, MESSAGE, EXAMPLE_DATAMAP, EXAMPLE_ASSET
     }
 }
