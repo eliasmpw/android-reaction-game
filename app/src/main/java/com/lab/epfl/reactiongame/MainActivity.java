@@ -46,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
 
         // name
         final String userID = user.get(SessionManager.KEY_NAME);
+        // user
+        final String name = user.get(SessionManager.KEY_USER);
         Log.v(TAG, userID);
         Button playButton1 = findViewById(R.id.PlayButton1);
         playButton1.setOnClickListener(new View.OnClickListener() {
@@ -55,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.v(TAG, userID);
                 Intent loadingIntent = new Intent(MainActivity.this, LoadingActivity.class);
                 loadingIntent.putExtra("userID", userID);
+                loadingIntent.putExtra("name", name);
                 loadingIntent.putExtra("gameType", 0);
                 MainActivity.this.startActivity(loadingIntent);
 //                MatchMaking(userID);
@@ -70,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
 //                addNameToLookingForGameDB(userID);
                 Intent loadingIntent = new Intent(MainActivity.this, LoadingActivity.class);
                 loadingIntent.putExtra("userID", userID);
+                loadingIntent.putExtra("name", name);
                 loadingIntent.putExtra("gameType", 1);
                 MainActivity.this.startActivity(loadingIntent);
 //                MatchMaking(userID);
@@ -85,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
 //                addNameToLookingForGameDB(userID);
                 Intent loadingIntent = new Intent(MainActivity.this, LoadingActivity.class);
                 loadingIntent.putExtra("userID", userID);
+                loadingIntent.putExtra("name", name);
                 loadingIntent.putExtra("gameType", 2);
                 MainActivity.this.startActivity(loadingIntent);
 //                MatchMaking(userID);

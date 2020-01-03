@@ -1,5 +1,6 @@
 package com.lab.epfl.reactiongame;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -23,6 +24,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import static java.lang.Math.abs;
@@ -57,26 +59,29 @@ public class GameChooseActivity extends AppCompatActivity {
     private Chronometer myTime;
     private int testInt = 0;
 
+    private HashMap<DatabaseReference, ValueEventListener> listenerHashMap = new HashMap<>();
+    public static void removeValueEventListener(HashMap<DatabaseReference, ValueEventListener> hashMap) {
+        for (Map.Entry<DatabaseReference, ValueEventListener> entry : hashMap.entrySet()) {
+            DatabaseReference databaseReference = entry.getKey();
+            ValueEventListener valueEventListener = entry.getValue();
+            databaseReference.removeEventListener(valueEventListener);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // TODO load player number from previous activity
-        playerNumber = 1;
-        // TODO load game type from previous activity
-        gameType = 2;
-        // TODO load Game Id from previous activity
-        gameId = "test";
+        Intent intent = getIntent();
+        String gameID = intent.getStringExtra("gameID");
+        String userID = intent.getStringExtra("userID");
+        String numPlayer = intent.getStringExtra("NumPlayer");
+        playerNumber = intent.getStringExtra("gameID").equals("Player1") ? 1 : 2;
+        gameType = intent.getIntExtra("gameType",0);
+        gameId = intent.getStringExtra("gameID");
 
         setContentView(R.layout.activity_game_choose);
 
         setInitialVariables();
-
-//        // TODO remove hard reset
-        GameChoose tempGame = new GameChoose();
-        tempGame.username1 = "-Lx8-sPqr-WSr5qQ4Ugk";
-        tempGame.username2 = "-Lx800SUwzw7vPuhxhFb";
-        dataGameRef.setValue(tempGame);
 
         ValueEventListener createdOnListener = new ValueEventListener() {
             @Override
@@ -96,8 +101,9 @@ public class GameChooseActivity extends AppCompatActivity {
                 // ...
             }
         };
-        dataGameRef.child("questionCreatedOn").addValueEventListener(createdOnListener);
-        dataGameRef.removeEventListener(createdOnListener);
+        DatabaseReference auxRef1 = dataGameRef.child("questionCreatedOn");
+        auxRef1.addValueEventListener(createdOnListener);
+        listenerHashMap.put(auxRef1, createdOnListener);
 
         ValueEventListener playerTimeListener = new ValueEventListener() {
             @Override
@@ -114,7 +120,9 @@ public class GameChooseActivity extends AppCompatActivity {
                 // ...
             }
         };
-        dataGameRef.child(playerNumber == 1 ? "questionTimePlayer2" : "questionTimePlayer1").addValueEventListener(playerTimeListener);
+        DatabaseReference auxRef2 = dataGameRef.child(playerNumber == 1 ? "questionTimePlayer2" : "questionTimePlayer1");
+        auxRef2.addValueEventListener(playerTimeListener);
+        listenerHashMap.put(auxRef2, playerTimeListener);
 
         ValueEventListener gameListener = new ValueEventListener() {
             @Override
@@ -151,10 +159,12 @@ public class GameChooseActivity extends AppCompatActivity {
                             if (game.points1 >= 5) {
                                 Log.e(TAG, "Player 1 WINS");
                                 Toast.makeText(getApplicationContext(), playerNumber == 1 ? "You win" : "You Lose", Toast.LENGTH_LONG);
+                                removeValueEventListener(listenerHashMap);
                                 finish();
                             } else if (game.points2 >= 5) {
                                 Log.e(TAG, "Player 2 WINS");
                                 Toast.makeText(getApplicationContext(), playerNumber == 2 ? "You win" : "You Lose", Toast.LENGTH_LONG);
+                                removeValueEventListener(listenerHashMap);
                                 finish();
                             } else {
                                 waitingForOponent = true;
@@ -173,6 +183,7 @@ public class GameChooseActivity extends AppCompatActivity {
             }
         };
         dataGameRef.addValueEventListener(gameListener);
+        listenerHashMap.put(dataGameRef, gameListener);
     }
 
     private void countDownAndShow() {
@@ -480,6 +491,22 @@ public class GameChooseActivity extends AppCompatActivity {
                 break;
             default:
                 break;
+        }
+    }
+
+    private long backPressedTime = 0;    // used by onBackPressed()
+
+    @Override
+    public void onBackPressed() {        // to prevent irritating accidental logouts
+        long t = System.currentTimeMillis();
+        if (t - backPressedTime > 2000) {    // 2 secs
+            backPressedTime = t;
+            Toast.makeText(this, "Press back again to exit queue",
+                    Toast.LENGTH_SHORT).show();
+        } else {    // this guy is serious
+            // clean up
+            removeValueEventListener(listenerHashMap, queryHashMap);
+            super.onBackPressed();       // bye
         }
     }
 }

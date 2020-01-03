@@ -31,6 +31,7 @@ public class LoadingActivity extends AppCompatActivity {
     private DatabaseReference lookingforgameGetRef ;
     private DatabaseReference lookingforgameRef;
     private String userID;
+    private String name;
     private int gameType;
     private HashMap<DatabaseReference, ValueEventListener> listenerHashMap = new HashMap<>();
     private HashMap<Query, ValueEventListener> queryHashMap = new HashMap<>();
@@ -57,6 +58,7 @@ public class LoadingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_loading);
         Intent intent = getIntent();
         userID = intent.getStringExtra("userID");
+        name = intent.getStringExtra("name");
         gameType = intent.getIntExtra("gameType",0);
         switch (gameType){
             case 0:
@@ -135,9 +137,10 @@ public class LoadingActivity extends AppCompatActivity {
                                             Log.e(TAG, "this is the id of the gameinprogress" + dataSnapshot.getValue());
 
 
-                                            Intent gameIntent = new Intent(LoadingActivity.this, GameActivity.class);
+                                            Intent gameIntent = new Intent(LoadingActivity.this, GameChooseActivity.class);
                                             gameIntent.putExtra("NumPlayer", "Player1");
                                             gameIntent.putExtra("userID", userID) ;
+                                            gameIntent.putExtra("name", name) ;
                                             gameIntent.putExtra("gameID", gameID);
                                             gameIntent.putExtra("gameType", gameType);
                                             LoadingActivity.this.startActivity(gameIntent);
@@ -205,7 +208,8 @@ public class LoadingActivity extends AppCompatActivity {
 
                                 Intent gameIntent = new Intent(LoadingActivity.this, GameActivity.class);
                                 gameIntent.putExtra("NumPlayer", "Player2");
-                                gameIntent.putExtra("userID", userID) ;
+                                gameIntent.putExtra("userID", userID);
+                                gameIntent.putExtra("name", name);
                                 gameIntent.putExtra("gameID", gameID);
                                 gameIntent.putExtra("gameType", gameType);
                                 LoadingActivity.this.startActivity(gameIntent);

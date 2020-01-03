@@ -3,6 +3,7 @@ package com.lab.epfl.reactiongame;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.renderscript.Sampler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -17,7 +18,11 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -28,6 +33,15 @@ public class LoginActivity extends AppCompatActivity {
     private Profile userProfile = null;
     private String userID;
     SessionManager session;
+
+    private HashMap<DatabaseReference, ValueEventListener> listenerHashMap = new HashMap<>();
+    public static void removeValueEventListener(HashMap<DatabaseReference, ValueEventListener> hashMap) {
+        for (Map.Entry<DatabaseReference, ValueEventListener> entry : hashMap.entrySet()) {
+            DatabaseReference databaseReference = entry.getKey();
+            ValueEventListener valueEventListener = entry.getValue();
+            databaseReference.removeEventListener(valueEventListener);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +78,7 @@ public class LoginActivity extends AppCompatActivity {
                 .getText().toString();
 
         session = new SessionManager(getApplicationContext());
-        profileRef.addValueEventListener(new ValueEventListener() {
+        final ValueEventListener auxListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 boolean notMember = true;
@@ -83,21 +97,24 @@ public class LoginActivity extends AppCompatActivity {
                 if (notMember) {
                     mTextView.setText(R.string.not_registered_yet);
                     mTextView.setTextColor(Color.RED);
+                    removeValueEventListener(listenerHashMap);
                 } else {
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     intent.putExtra(MyProfileFragment.USER_ID, userID);
-                    session.createLoginSession(userID);
+                    session.createLoginSession(userID, usernameInput);
                     startActivity(intent);
+                    removeValueEventListener(listenerHashMap);
+                    finish();
                 }
             }
-
-
-
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
-        });
+        };
+
+        profileRef.addValueEventListener(auxListener);
+        listenerHashMap.put(profileRef, auxListener);
     }
 
     @Override
