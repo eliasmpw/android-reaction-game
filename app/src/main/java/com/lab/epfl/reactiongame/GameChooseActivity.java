@@ -62,19 +62,21 @@ public class GameChooseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // TODO load player number from previous activity
-        playerNumber = 2;
+        playerNumber = 1;
         // TODO load game type from previous activity
         gameType = 2;
         // TODO load Game Id from previous activity
-        gameId = "-Lx80-WL0iPBp-6QkGrG";
+        gameId = "test";
 
         setContentView(R.layout.activity_game_choose);
 
         setInitialVariables();
 
 //        // TODO remove hard reset
-//        GameChoose tempGame = new GameChoose();
-//        dataGameRef.setValue()
+        GameChoose tempGame = new GameChoose();
+        tempGame.username1 = "-Lx8-sPqr-WSr5qQ4Ugk";
+        tempGame.username2 = "-Lx800SUwzw7vPuhxhFb";
+        dataGameRef.setValue(tempGame);
 
         ValueEventListener createdOnListener = new ValueEventListener() {
             @Override
@@ -95,6 +97,7 @@ public class GameChooseActivity extends AppCompatActivity {
             }
         };
         dataGameRef.child("questionCreatedOn").addValueEventListener(createdOnListener);
+        dataGameRef.removeEventListener(createdOnListener);
 
         ValueEventListener playerTimeListener = new ValueEventListener() {
             @Override
