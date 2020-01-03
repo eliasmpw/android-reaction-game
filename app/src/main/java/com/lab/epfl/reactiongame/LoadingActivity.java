@@ -138,7 +138,7 @@ public class LoadingActivity extends AppCompatActivity {
 
 
                                             Intent gameIntent = new Intent(LoadingActivity.this, GameChooseActivity.class);
-                                            gameIntent.putExtra("NumPlayer", "Player1");
+                                            gameIntent.putExtra("NumPlayer", 1);
                                             gameIntent.putExtra("userID", userID) ;
                                             gameIntent.putExtra("name", name) ;
                                             gameIntent.putExtra("gameID", gameID);
@@ -206,8 +206,8 @@ public class LoadingActivity extends AppCompatActivity {
                                 Log.e(TAG, "this is the id of the gameinprogress" + dataSnapshot.getValue());
 
 
-                                Intent gameIntent = new Intent(LoadingActivity.this, GameActivity.class);
-                                gameIntent.putExtra("NumPlayer", "Player2");
+                                Intent gameIntent = new Intent(LoadingActivity.this, GameChooseActivity.class);
+                                gameIntent.putExtra("NumPlayer", 2);
                                 gameIntent.putExtra("userID", userID);
                                 gameIntent.putExtra("name", name);
                                 gameIntent.putExtra("gameID", gameID);

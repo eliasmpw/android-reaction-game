@@ -75,7 +75,7 @@ public class GameChooseActivity extends AppCompatActivity {
         String gameID = intent.getStringExtra("gameID");
         String userID = intent.getStringExtra("userID");
         String numPlayer = intent.getStringExtra("NumPlayer");
-        playerNumber = intent.getStringExtra("gameID").equals("Player1") ? 1 : 2;
+        playerNumber = intent.getIntExtra("NumPlayer",1);
         gameType = intent.getIntExtra("gameType",0);
         gameId = intent.getStringExtra("gameID");
 
@@ -505,7 +505,7 @@ public class GameChooseActivity extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
         } else {    // this guy is serious
             // clean up
-            removeValueEventListener(listenerHashMap, queryHashMap);
+            removeValueEventListener(listenerHashMap);
             super.onBackPressed();       // bye
         }
     }
