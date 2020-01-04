@@ -39,7 +39,6 @@ public class WearService extends WearableListenerService {
 
     // Actions defined for the onStartCommand(...)
     public enum ACTION_SEND {
-        EXAMPLE_SEND_STRING, EXAMPLE_SEND_BITMAP
     }
 
     @Override
@@ -53,25 +52,6 @@ public class WearService extends WearableListenerService {
         ACTION_SEND action = ACTION_SEND.valueOf(intent.getAction());
 
         switch (action) {
-            case EXAMPLE_SEND_STRING:
-                // Example action of sending a String received from the MainActivity
-                String message_to_send = intent.getStringExtra(MainActivity
-                        .EXAMPLE_INTENT_STRING_NAME_ACTIVITY_TO_SERVICE);
-                sendMessage(message_to_send, BuildConfig.W_path_example_message);
-                break;
-            case EXAMPLE_SEND_BITMAP:
-                // Example action of sending the app icon, resized to 128 pixels
-                Bitmap iconBitmap = BitmapFactory.decodeResource(
-                        getApplicationContext().getResources(), R.drawable.esl_logo);
-                Asset iconAsset = createAssetFromBitmap(iconBitmap, 128);
-                // Create the datamap
-                PutDataMapRequest putDataMapRequest = PutDataMapRequest
-                        .create(BuildConfig.W_path_example_datamap);
-                putDataMapRequest
-                        .getDataMap()
-                        .putAsset(BuildConfig.W_datamap_example_image, iconAsset);
-                sendPutDataMapRequest(putDataMapRequest);
-                break;
             default:
                 Log.w(TAG, "Unknown action");
                 break;
@@ -91,6 +71,14 @@ public class WearService extends WearableListenerService {
                 + "\", from node " + messageEvent.getSourceNodeId());
 
         switch (path) {
+            case BuildConfig.W_path_example_message:
+                // The message received is already extracted in the `data` variable
+                Intent intent = new Intent(MainActivity
+                        .EXAMPLE_BROADCAST_NAME_FOR_NOTIFICATION_MESSAGE_STRING_RECEIVED);
+                intent.putExtra(MainActivity
+                        .EXAMPLE_INTENT_STRING_NAME_WHEN_BROADCAST, data);
+                LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+                break;
             default:
                 Log.w(TAG, "Received a message for unknown path " + path + " : " + data);
         }
@@ -119,6 +107,16 @@ public class WearService extends WearableListenerService {
 
                 assert uri.getPath() != null;
                 switch (uri.getPath()) {
+                    case BuildConfig.W_path_example_datamap:
+                        // Extract the data behind the key you know contains data
+                        Asset asset = dataMapItem
+                                .getDataMap()
+                                .getAsset(BuildConfig.W_datamap_example_image);
+                        intent = new Intent(MainActivity
+                                .EXAMPLE_BROADCAST_NAME_FOR_NOTIFICATION_IMAGE_DATAMAP_RECEIVED);
+                        decodeAndBroadcastBitmapFromAsset(asset, intent, MainActivity
+                                .EXAMPLE_INTENT_IMAGE_NAME_WHEN_BROADCAST);
+                        break;
                     default:
                         Log.v(TAG, "Data changed for unhandled path: " + uri);
                         break;

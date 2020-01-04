@@ -65,6 +65,9 @@ public class LoginActivity extends AppCompatActivity {
                 startActivityForResult(intentEditProfile, REGISTER_PROFILE);
             }
         });
+
+        session = new SessionManager(getApplicationContext());
+        checkLogin(session);
     }
 
     public void clickedLoginButtonXmlCallback(View view) {
@@ -130,5 +133,24 @@ public class LoginActivity extends AppCompatActivity {
                 password.setText(userProfile.password);
             }
         }
+    }
+
+
+    /**
+     * Check login method wil check user login status
+     * If false it will redirect user to login page
+     * Else won't do anything
+     * */
+    public void checkLogin(SessionManager session){
+        Log.e(TAG, "checking");
+        // Check login status
+        if(session.isLoggedIn()){
+            // user is not logged in redirect him to Login Activity
+            Intent i = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(i);
+            removeValueEventListener(listenerHashMap);
+            finish();
+        }
+
     }
 }

@@ -31,7 +31,7 @@ class Profile implements Serializable {
         try {
             imageStream = new FileInputStream(photoPath);
             final Bitmap userImage = BitmapFactory.decodeStream(imageStream);
-            Asset asset = WearService.createAssetFromBitmap(userImage);
+            Asset asset = WearService.createAssetFromBitmap(userImage, 390);
             dataMap.putAsset("photo", asset);
         } catch (FileNotFoundException e) {
             e.printStackTrace();

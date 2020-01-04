@@ -32,15 +32,29 @@ public class MainActivity extends AppCompatActivity {
     SessionManager session;
 //    private Profile userProfile;
 
+    public static final String EXAMPLE_INTENT_STRING_NAME_ACTIVITY_TO_SERVICE =
+            "EXAMPLE_INTENT_STRING_NAME_ACTIVITY_TO_SERVICE";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // TODO remove proof of concept
+        // Request to send a string
+        Intent intent_send_string = new Intent(this, WearService.class);
+        intent_send_string.setAction(WearService.ACTION_SEND.EXAMPLE_SEND_STRING.name());
+        intent_send_string.putExtra(EXAMPLE_INTENT_STRING_NAME_ACTIVITY_TO_SERVICE, "Hello Wear");
+        startService(intent_send_string);
+        // Request to send a bitmap
+        Intent intent_send_bitmap = new Intent(this, WearService.class);
+        intent_send_bitmap.setAction(WearService.ACTION_SEND.EXAMPLE_SEND_BITMAP.name());
+        startService(intent_send_bitmap);
+
+
 //        Intent intent = getIntent();
 //        userProfile = (Profile) intent.getSerializableExtra("userProfileWelcome");
 //        sendProfileToWatch();
         session = new SessionManager(getApplicationContext());
-        session.checkLogin();
         // get user data from session
         HashMap<String, String> user = session.getUserDetails();
 
@@ -132,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Log.v(TAG, "CLICKED logoutButton BUTTON!!!!");
                 session.logoutUser();
+                finish();
             }
         });
 
@@ -354,6 +369,9 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
 //    }
+
+
+
 
     public void ClickedStartGame4(View view) {
         Intent intent = new Intent(MainActivity.this, game4Activity.class);

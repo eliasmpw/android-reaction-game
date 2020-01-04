@@ -37,18 +37,10 @@ allprojects {
                 mainactivity        : "MainActivity",
                 recordingactivity   : "RecordingActivity",
 
-                a_key               : "a_value",
-                some_other_key      : "some_other_value",
+                path_example_message: "/EXAMPLE_PATH_MESSAGE",
+                path_example_datamap: "/EXAMPLE_PATH_DATAMAP",
 
-                profile_path        : "/PROFILE",
-                profile_key         : "profile",
-
-                heart_rate_path     : "/HEART_RATE",
-                heart_rate_key      : "heart_rate",
-
-                location_path       : "/LOCATION",
-                longitude_key       : "longitude",
-                latitude_key        : "latitude",
+                datamap_example_image: "EXAMPLE_IMAGE_NAME_IN_DATAMAP",
         ]
     }
 }

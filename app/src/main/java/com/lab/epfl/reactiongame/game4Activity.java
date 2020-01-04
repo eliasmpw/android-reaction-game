@@ -103,19 +103,19 @@ public class game4Activity extends AppCompatActivity {
         finish();
     }
 
-    private void sendStartToWatch() {
-        Intent intentWear = new Intent(game4Activity.this, WearService.class);
-        /*intentWear.setAction(WearService.ACTION_SEND.STARTACTIVITY.name());
-        intentWear.putExtra(WearService.ACTIVITY_TO_START, "game4Activity");*/
-        intentWear.setAction(WearService.ACTION_SEND.MESSAGE.name());
-        intentWear.putExtra(WearService.MESSAGE, "Messaging other device!");
-        startService(intentWear);
-    }
-    private void sendProfileToWatch() {
-        int userProfile = 1;
-        Intent intentWear = new Intent(game4Activity.this,WearService.class);
-        intentWear.setAction(WearService.ACTION_SEND.PROFILE_SEND.name());
-        intentWear.putExtra("user",userProfile);
-        startService(intentWear);
-    }
+//    private void sendStartToWatch() {
+//        Intent intentWear = new Intent(game4Activity.this, WearService.class);
+//        /*intentWear.setAction(WearService.ACTION_SEND.STARTACTIVITY.name());
+//        intentWear.putExtra(WearService.ACTIVITY_TO_START, "game4Activity");*/
+//        intentWear.setAction(WearService.ACTION_SEND.MESSAGE.name());
+//        intentWear.putExtra(WearService.MESSAGE, "Messaging other device!");
+//        startService(intentWear);
+//    }
+//    private void sendProfileToWatch() {
+//        int userProfile = 1;
+//        Intent intentWear = new Intent(game4Activity.this,WearService.class);
+//        intentWear.setAction(WearService.ACTION_SEND.PROFILE_SEND.name());
+//        intentWear.putExtra("user",userProfile);
+//        startService(intentWear);
+//    }
 }
