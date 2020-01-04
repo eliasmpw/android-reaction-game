@@ -6,6 +6,7 @@ The aim of this project is to develop a reaction game between in android for two
 This repository contains all the files required to excecute and run the application.
 
 ## Structure
+```
 ├── app                                             <- Files for the phone/tablet 
     └── java/.../reactiongame                       <- Classes, Activities, Fragments, Classes
       └── Chronometer                               <- Class to display the timer while playing
@@ -81,6 +82,8 @@ This repository contains all the files required to excecute and run the applicat
         └── styles 
         
 ├── README.md                                       <- Readme file
+
+```
 ```
 
 ## Setup
@@ -124,3 +127,5 @@ This repository contains all the files required to excecute and run the applicat
 - Elias Poroma Wiri
 - Andres Ivan Montero Cassab
 - Wang Shu
+
+```
