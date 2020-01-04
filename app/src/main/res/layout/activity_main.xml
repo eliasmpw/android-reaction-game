@@ -18,26 +18,25 @@
         android:id="@+id/PlayButton1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="88dp"
+        android:layout_marginTop="94dp"
         android:text="play game 1"
         app:layout_constraintBottom_toTopOf="@+id/PlayButton2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.228"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
-        app:layout_constraintVertical_bias="0.071" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <Button
         android:id="@+id/PlayButton2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="220dp"
+        android:layout_marginTop="76dp"
         android:text="play game 2"
         app:layout_constraintBottom_toTopOf="@+id/scoresButton"
         app:layout_constraintEnd_toEndOf="@+id/PlayButton1"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/PlayButton1"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/PlayButton1"
         app:layout_constraintVertical_bias="0.326" />
 
     <Button
@@ -47,9 +46,9 @@
         android:layout_marginTop="94dp"
         android:layout_marginEnd="56dp"
         android:text="play game 3"
-        app:layout_constraintBottom_toBottomOf="@+id/PlayButton1"
+        app:layout_constraintBottom_toTopOf="@+id/PlayButton4"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.983"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/PlayButton1"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
@@ -58,20 +57,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="76dp"
-        android:onClick="ClickedStartGame4"
         android:text="play game 4"
-        app:layout_constraintBottom_toBottomOf="@+id/PlayButton2"
+        app:layout_constraintBottom_toTopOf="@+id/scoresButton"
         app:layout_constraintEnd_toEndOf="@+id/PlayButton3"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/PlayButton3"
-        app:layout_constraintTop_toBottomOf="@+id/PlayButton3"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/PlayButton3" />
 
     <Button
         android:id="@+id/scoresButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="116dp"
+        android:layout_marginBottom="110dp"
         android:text="Scores"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/PlayButton4"

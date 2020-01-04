@@ -55,7 +55,8 @@ public class GameChooseActivity extends AppCompatActivity {
     };
     private HashMap<String, Integer> mapStringToResource;
     private GameChoose game;
-    private int countDown;
+    private String name;
+    private String userID;
     private Chronometer myTime;
     private int testInt = 0;
 
@@ -72,9 +73,8 @@ public class GameChooseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
-        String gameID = intent.getStringExtra("gameID");
-        String userID = intent.getStringExtra("userID");
-        String numPlayer = intent.getStringExtra("NumPlayer");
+        userID = intent.getStringExtra("userID");
+        name = intent.getStringExtra("name");
         playerNumber = intent.getIntExtra("NumPlayer",1);
         gameType = intent.getIntExtra("gameType",0);
         gameId = intent.getStringExtra("gameID");
@@ -127,17 +127,27 @@ public class GameChooseActivity extends AppCompatActivity {
         ValueEventListener gameListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.e(TAG, "DATA RECEIVED: " + dataSnapshot.toString());
+                // If other player left the game and removed game in progress, finish activity
+                if (dataSnapshot.getValue() == null) {
+                    removeValueEventListener(listenerHashMap);
+                    Toast.makeText(getApplicationContext(),
+                            "Other player left the match",
+                            Toast.LENGTH_LONG).show();
+                    finish();
+                    return;
+                }
+                
+                Log.v(TAG, "DATA RECEIVED: " + dataSnapshot.toString());
                 // Get Post object and use the values to update the UI
                 game = dataSnapshot.getValue(GameChoose.class);
-                Log.e(TAG, "DATA CHANGE FOR PLAYER: " + playerNumber + " -> " + gameToString(game));
-                Log.e(TAG, "ENMIDATA CHANGE: " + Boolean.toString(startedGame) + " " + Boolean.toString(waitingForOponent) + Boolean.toString(myResponseIsReady));
+                Log.v(TAG, "DATA CHANGE FOR PLAYER: " + playerNumber + " -> " + gameToString(game));
+                Log.v(TAG, "ENMIDATA CHANGE: " + Boolean.toString(startedGame) + " " + Boolean.toString(waitingForOponent) + Boolean.toString(myResponseIsReady));
                 if (!startedGame) {
                     if (playerNumber == 2) {
                         if (game.answers.size() == 0) {
                             ArrayList<GameOption> auxAnswers = createAnswers();
                             setAnswers(auxAnswers);
-                            Log.e(TAG, "SIZE ANSWERS: " + game.answers.size());
+                            Log.v(TAG, "SIZE ANSWERS: " + game.answers.size());
                             dataGameRef.setValue(game);
                         } else {
                             return;
@@ -157,14 +167,24 @@ public class GameChooseActivity extends AppCompatActivity {
                     } else {
                         if (myResponseIsReady) {
                             if (game.points1 >= 5) {
-                                Log.e(TAG, "Player 1 WINS");
-                                Toast.makeText(getApplicationContext(), playerNumber == 1 ? "You win" : "You Lose", Toast.LENGTH_LONG);
+                                Log.v(TAG, "Player 1 WINS");
+                                Intent intent = new Intent(GameChooseActivity.this, GameResultActivity.class);
+                                intent.putExtra("win", playerNumber == 1);
+                                intent.putExtra("highscore", false);
+                                intent.putExtra("time", game.time1);
+                                startActivity(intent);
                                 removeValueEventListener(listenerHashMap);
+                                removeGameInProgress();
                                 finish();
                             } else if (game.points2 >= 5) {
-                                Log.e(TAG, "Player 2 WINS");
-                                Toast.makeText(getApplicationContext(), playerNumber == 2 ? "You win" : "You Lose", Toast.LENGTH_LONG);
+                                Log.v(TAG, "Player 2 WINS");
+                                Intent intent = new Intent(GameChooseActivity.this, GameResultActivity.class);
+                                intent.putExtra("win", playerNumber == 2);
+                                intent.putExtra("highscore", false);
+                                intent.putExtra("time", game.time2);
+                                startActivity(intent);
                                 removeValueEventListener(listenerHashMap);
+                                removeGameInProgress();
                                 finish();
                             } else {
                                 waitingForOponent = true;
@@ -200,6 +220,9 @@ public class GameChooseActivity extends AppCompatActivity {
         totalTime.setText(formatTimeMilliseconds(playerNumber == 1 ? game.time1 : game.time2));
 
         switch (game.lastWinner) {
+            case -1: question.setText(R.string.NoWinner);
+                question.setTextColor(Color.WHITE);
+                break;
             case 0: question.setText(R.string.GetReady);
                 question.setTextColor(Color.WHITE);
                 break;
@@ -219,10 +242,9 @@ public class GameChooseActivity extends AppCompatActivity {
             auxButton.setClickable(false);
         }
 
-        countDown = 3;
-        subtitle.setText(Integer.toString(countDown));
+        subtitle.setText(Integer.toString(4));
 
-        new CountDownTimer(3000, 1000) {
+        new CountDownTimer(4000, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 TextView subtitle = findViewById(R.id.Subtitle);
@@ -359,19 +381,21 @@ public class GameChooseActivity extends AppCompatActivity {
             if(game.questionTimePlayer1 == -1 && game.questionTimePlayer2 == -1) {
                 game.questionTimePlayer1 = 10000;
                 game.questionTimePlayer2 = 10000;
-            }
-            if (game.questionTimePlayer1 == -1) {
-                game.questionTimePlayer1 = game.questionTimePlayer2 + 1000;
-            }
-            if (game.questionTimePlayer2 == -1) {
-                game.questionTimePlayer2 = game.questionTimePlayer1 + 1000;
-            }
-            if (game.questionTimePlayer1 < game.questionTimePlayer2) {
-                game.lastWinner = 1;
-                game.points1++;
+                game.lastWinner = -1;
             } else {
-                game.lastWinner = 2;
-                game.points2++;
+                if (game.questionTimePlayer1 == -1) {
+                    game.questionTimePlayer1 = game.questionTimePlayer2 + 1000;
+                }
+                if (game.questionTimePlayer2 == -1) {
+                    game.questionTimePlayer2 = game.questionTimePlayer1 + 1000;
+                }
+                if (game.questionTimePlayer1 < game.questionTimePlayer2) {
+                    game.lastWinner = 1;
+                    game.points1++;
+                } else {
+                    game.lastWinner = 2;
+                    game.points2++;
+                }
             }
             game.questionCreatedOn = System.currentTimeMillis();
             game.time1 += game.questionTimePlayer1;
@@ -387,6 +411,7 @@ public class GameChooseActivity extends AppCompatActivity {
 
     public String formatTimeMilliseconds(long time) {
         DecimalFormat df = new DecimalFormat("0");
+        DecimalFormat two = new DecimalFormat("00");
         DecimalFormat mf = new DecimalFormat("000");
 
         int hours = (int)(time / (3600 * 1000));
@@ -407,18 +432,20 @@ public class GameChooseActivity extends AppCompatActivity {
         }
         if (minutes > 0) {
             text += df.format(minutes) + ":";
+            text += two.format(seconds) + ".";
+        } else {
+            text += df.format(seconds) + ".";
         }
-        text += df.format(seconds) + ".";
         text += mf.format(milliseconds);
         return text;
     }
 
     public void testButtonElias(View view) {
-        Log.e(TAG, "TEST BUTTONCITO");
-        Log.e(TAG, Boolean.toString(startedGame));
-        Log.e(TAG, Boolean.toString(waitingForOponent));
-        Log.e(TAG, Boolean.toString(myResponseIsReady));
-        Log.e(TAG, gameToString(game));
+        Log.v(TAG, "TEST BUTTONCITO");
+        Log.v(TAG, Boolean.toString(startedGame));
+        Log.v(TAG, Boolean.toString(waitingForOponent));
+        Log.v(TAG, Boolean.toString(myResponseIsReady));
+        Log.v(TAG, gameToString(game));
 //        DatabaseReference secondTest = dataGameRef.child("test");
 //        secondTest.setValue("hello");
 //        if(testInt % 2 == 0) {
@@ -496,16 +523,21 @@ public class GameChooseActivity extends AppCompatActivity {
 
     private long backPressedTime = 0;    // used by onBackPressed()
 
+    private void removeGameInProgress() {
+        dataGameRef.removeValue();
+    }
+    
     @Override
     public void onBackPressed() {        // to prevent irritating accidental logouts
         long t = System.currentTimeMillis();
         if (t - backPressedTime > 2000) {    // 2 secs
             backPressedTime = t;
-            Toast.makeText(this, "Press back again to exit queue",
+            Toast.makeText(this, "Press back again to exit game",
                     Toast.LENGTH_SHORT).show();
         } else {    // this guy is serious
             // clean up
             removeValueEventListener(listenerHashMap);
+            removeGameInProgress();
             super.onBackPressed();       // bye
         }
     }

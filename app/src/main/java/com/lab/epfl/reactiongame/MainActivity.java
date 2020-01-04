@@ -105,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
 //                addNameToLookingForGameDB(userID);
                 Intent loadingIntent = new Intent(MainActivity.this, LoadingActivity.class);
                 loadingIntent.putExtra("userID", userID);
+                loadingIntent.putExtra("name", name);
                 loadingIntent.putExtra("gameType", 3);
                 MainActivity.this.startActivity(loadingIntent);
 //                MatchMaking(userID);

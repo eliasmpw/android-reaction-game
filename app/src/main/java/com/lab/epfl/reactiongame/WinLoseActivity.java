@@ -1,12 +1,10 @@
 package com.lab.epfl.reactiongame;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class WinLoseActivity extends AppCompatActivity {
 
@@ -20,6 +18,8 @@ public class WinLoseActivity extends AppCompatActivity {
         yourtime = (long)getIntent().getSerializableExtra("yourTime");
         Boolean result;
         result = (Boolean)getIntent().getSerializableExtra("result");
+        int ifbest;
+        ifbest = (int)getIntent().getSerializableExtra("ifbest");
         TextView textView = findViewById(R.id.game4result);
         if(result == false) {
             resultImage.setImageDrawable(getDrawable(R.drawable.loseimage));
@@ -32,11 +32,5 @@ public class WinLoseActivity extends AppCompatActivity {
             resultImage.setImageDrawable(getDrawable(R.drawable.winimage));
             textView.setText("Your react time is " + (int) yourtime + " ms!\nYou WIN :)");
         }
-    }
-
-    public void Return2Main(View view){
-        Intent intent = new Intent(WinLoseActivity.this,MainActivity.class);
-        startActivity(intent);
-        finish();
     }
 }

@@ -42,4 +42,5 @@
     <string name="TotalTimeText">My total time:</string>
     <string name="Correct">Correct!</string>
     <string name="Wrong">Wrong! (Time penalization)</string>
+    <string name="NoWinner">Both wrong, no point</string>
 </resources>

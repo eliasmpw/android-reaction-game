@@ -137,7 +137,12 @@ public class LoadingActivity extends AppCompatActivity {
                                             Log.e(TAG, "this is the id of the gameinprogress" + dataSnapshot.getValue());
 
 
-                                            Intent gameIntent = new Intent(LoadingActivity.this, GameChooseActivity.class);
+                                            Intent gameIntent;
+                                            if (gameType < 3) {
+                                                gameIntent = new Intent(LoadingActivity.this, GameChooseActivity.class);
+                                            } else {
+                                                gameIntent = new Intent(LoadingActivity.this, GameFourActivity.class);
+                                            }
                                             gameIntent.putExtra("NumPlayer", 1);
                                             gameIntent.putExtra("userID", userID) ;
                                             gameIntent.putExtra("name", name) ;
@@ -205,8 +210,13 @@ public class LoadingActivity extends AppCompatActivity {
                                 Log.e(TAG, "INSIDE OF gameinprogress FOR GAME IN PROGRESS WITH USERID !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ");
                                 Log.e(TAG, "this is the id of the gameinprogress" + dataSnapshot.getValue());
 
+                                Intent gameIntent;
 
-                                Intent gameIntent = new Intent(LoadingActivity.this, GameChooseActivity.class);
+                                if (gameType < 3) {
+                                    gameIntent = new Intent(LoadingActivity.this, GameChooseActivity.class);
+                                } else {
+                                    gameIntent = new Intent(LoadingActivity.this, GameFourActivity.class);
+                                }
                                 gameIntent.putExtra("NumPlayer", 2);
                                 gameIntent.putExtra("userID", userID);
                                 gameIntent.putExtra("name", name);

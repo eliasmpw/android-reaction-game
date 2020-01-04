@@ -18,6 +18,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -170,28 +171,27 @@ public class ScoreGame2Fragment extends Fragment {
                 TextView first = fragmentView.findViewById(R.id.firstPlace);
                 first.setText(nameList2.get(0));
                 TextView firstScore = fragmentView.findViewById(R.id.firstPlaceScore);
-                firstScore.setText(scoresList2.get(0));
-
+                firstScore.setText(formatTimeMilliseconds(Long.parseLong(scoresList2.get(0))));
 
                 TextView second = fragmentView.findViewById(R.id.SecondPlace);
                 second.setText(nameList2.get(1));
                 TextView secondScore = fragmentView.findViewById(R.id.SecondPlaceScore);
-                secondScore.setText(scoresList2.get(1));
+                secondScore.setText(formatTimeMilliseconds(Long.parseLong(scoresList2.get(1))));
 
                 TextView third = fragmentView.findViewById(R.id.ThirdPlace);
                 third.setText(nameList2.get(2));
                 TextView thirdScore = fragmentView.findViewById(R.id.ThirdPlaceScore);
-                thirdScore.setText(scoresList2.get(2));
+                thirdScore.setText(formatTimeMilliseconds(Long.parseLong(scoresList2.get(2))));
 
                 TextView forth = fragmentView.findViewById(R.id.forthPlace);
                 forth.setText(nameList2.get(3));
-                TextView forthScore = fragmentView.findViewById(R.id.firstPlaceScore);
-                forthScore.setText(scoresList2.get(3));
+                TextView forthScore = fragmentView.findViewById(R.id.forthPlaceScore);
+                forthScore.setText(formatTimeMilliseconds(Long.parseLong(scoresList2.get(3))));
 
                 TextView fifth = fragmentView.findViewById(R.id.fifthPlace);
                 fifth.setText(nameList2.get(4));
-                TextView fifthScore = fragmentView.findViewById(R.id.firstPlaceScore);
-                fifthScore.setText(scoresList2.get(4));
+                TextView fifthScore = fragmentView.findViewById(R.id.fifthPlaceScore);
+                fifthScore.setText(formatTimeMilliseconds(Long.parseLong(scoresList2.get(4))));
             }
 
             @Override
@@ -201,6 +201,38 @@ public class ScoreGame2Fragment extends Fragment {
         };
         namesRef.addListenerForSingleValueEvent(valueEventListener);
 
+    }
+
+
+    public String formatTimeMilliseconds(long time) {
+        DecimalFormat df = new DecimalFormat("0");
+        DecimalFormat two = new DecimalFormat("00");
+        DecimalFormat mf = new DecimalFormat("000");
+
+        int hours = (int)(time / (3600 * 1000));
+        int remaining = (int)(time % (3600 * 1000));
+
+        int minutes = (int)(remaining / (60 * 1000));
+        remaining = (int)(remaining % (60 * 1000));
+
+        int seconds = (int)(remaining / 1000);
+        remaining = (int)(remaining % (1000));
+
+        int milliseconds = (int)((int)time % 1000);
+
+        String text = "";
+
+        if (hours > 0) {
+            text += df.format(hours) + ":";
+        }
+        if (minutes > 0) {
+            text += df.format(minutes) + ":";
+            text += two.format(seconds) + ".";
+        } else {
+            text += df.format(seconds) + ".";
+        }
+        text += mf.format(milliseconds);
+        return text;
     }
 }
 
