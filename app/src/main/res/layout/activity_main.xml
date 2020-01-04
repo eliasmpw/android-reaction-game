@@ -12,6 +12,8 @@
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/log_in_cropped" />
 
     <Button
@@ -21,8 +23,7 @@
         android:layout_marginTop="94dp"
         android:text="Math game"
         app:layout_constraintBottom_toTopOf="@+id/PlayButton2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.228"
+        app:layout_constraintEnd_toEndOf="@+id/space2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
@@ -44,12 +45,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="94dp"
-        android:layout_marginEnd="56dp"
         android:text="Animals game"
         app:layout_constraintBottom_toTopOf="@+id/PlayButton4"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/PlayButton1"
+        app:layout_constraintStart_toStartOf="@+id/space2"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <Button
@@ -68,36 +67,40 @@
         android:id="@+id/scoresButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="110dp"
         android:text="Scores"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/PlayButton4"
         app:layout_constraintStart_toEndOf="@+id/PlayButton2"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toTopOf="@+id/space2" />
 
     <Button
         android:id="@+id/LogoutButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/logout"
-        app:layout_constraintBottom_toBottomOf="@+id/ExitButton"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/scoresButton"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/PlayButton2"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toTopOf="@+id/scoresButton" />
 
     <Button
         android:id="@+id/ExitButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="28dp"
         android:text="@string/exit"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/scoresButton"
-        app:layout_constraintTop_toBottomOf="@+id/PlayButton4"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toTopOf="@+id/scoresButton" />
+
+    <Space
+        android:id="@+id/space2"
+        android:layout_width="43dp"
+        android:layout_height="37dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
