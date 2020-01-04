@@ -24,17 +24,20 @@ public class WinLoseActivity extends AppCompatActivity {
         TextView textView = findViewById(R.id.game4result);
         if(result == false) {
             resultImage.setImageDrawable(getDrawable(R.drawable.loseimage));
-            if (yourtime == -1)
+            if (yourtime == 9999)
                 textView.setText("You make wrong choice...\nYou LOSE :(");
             else
-                textView.setText("Your react time is " + (int) yourtime + " ms!\nYou LOSE :(");
+                textView.setText("Your react time is " + (float)yourtime/1000 + " s!\nYou LOSE :(");
         }
         else {
             resultImage.setImageDrawable(getDrawable(R.drawable.winimage));
-            textView.setText("Your react time is " + (int) yourtime + " ms!\nYou WIN :)");
+            textView.setText("Your react time is " + (float)yourtime/1000 + " s!\nYou WIN :)");
         }
         if (ifbest == 0) {
             ifBestResult.setText("");
+        }
+        else{
+            ifBestResult.setText("Congratulations!\nYou make a High score!");
         }
     }
 }
