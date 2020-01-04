@@ -27,6 +27,38 @@ public class MainActivity extends WearableActivity {
     public static final String
             EXAMPLE_INTENT_IMAGE_NAME_WHEN_BROADCAST =
             "EXAMPLE_INTENT_IMAGE_NAME_WHEN_BROADCAST";
+    public static final String
+            BROADCAST_LOADING =
+            "BROADCAST_LOADING";
+    public static final String
+            BROADCAST_HIGHSCORES =
+            "BROADCAST_HIGHSCORES";
+    public static final String
+            BROADCAST_CHOOSEFROMMAIN =
+            "BROADCAST_CHOOSEFROMMAIN";
+
+    private BroadcastReceiver loadingBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Intent auxIntent = new Intent(MainActivity.this, LoadingActivity.class);
+            startActivity(auxIntent);
+        }
+    };
+
+    private BroadcastReceiver highscoresBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Intent auxIntent = new Intent(MainActivity.this, HighscoresActivity.class);
+            startActivity(auxIntent);
+        }
+    };
+    private BroadcastReceiver chooseFromMainBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Intent auxIntent = new Intent(MainActivity.this, GameChooseActivity.class);
+            startActivity(auxIntent);
+        }
+    };
 
     private BroadcastReceiver mBroadcastReveiverString = new BroadcastReceiver() {
         @Override
@@ -56,7 +88,7 @@ public class MainActivity extends WearableActivity {
         setContentView(R.layout.activity_main);
 
         mTextView = findViewById(R.id.text);
-        mImageView = findViewById(R.id.image);
+        mImageView = findViewById(R.id.imageMain);
 
         // Enables Always-on
         setAmbientEnabled();
@@ -69,12 +101,16 @@ public class MainActivity extends WearableActivity {
         // Register broadcasts from WearService
         LocalBroadcastManager
                 .getInstance(this)
-                .registerReceiver(mBroadcastReveiverString, new IntentFilter(
-                        EXAMPLE_BROADCAST_NAME_FOR_NOTIFICATION_MESSAGE_STRING_RECEIVED));
+                .registerReceiver(loadingBroadcastReceiver, new IntentFilter(
+                        BROADCAST_LOADING));
         LocalBroadcastManager
                 .getInstance(this)
-                .registerReceiver(mBroadcastReveiverImage, new IntentFilter(
-                        EXAMPLE_BROADCAST_NAME_FOR_NOTIFICATION_IMAGE_DATAMAP_RECEIVED));
+                .registerReceiver(highscoresBroadcastReceiver, new IntentFilter(
+                        BROADCAST_HIGHSCORES));
+        LocalBroadcastManager
+                .getInstance(this)
+                .registerReceiver(chooseFromMainBroadcastReceiver, new IntentFilter(
+                        BROADCAST_CHOOSEFROMMAIN));
     }
 
     @Override
@@ -84,9 +120,12 @@ public class MainActivity extends WearableActivity {
         // Un-register broadcasts from WearService
         LocalBroadcastManager
                 .getInstance(this)
-                .unregisterReceiver(mBroadcastReveiverString);
+                .unregisterReceiver(loadingBroadcastReceiver);
         LocalBroadcastManager
                 .getInstance(this)
-                .unregisterReceiver(mBroadcastReveiverImage);
+                .unregisterReceiver(highscoresBroadcastReceiver);
+        LocalBroadcastManager
+                .getInstance(this)
+                .unregisterReceiver(chooseFromMainBroadcastReceiver);
     }
 }

@@ -40,6 +40,15 @@ allprojects {
                 path_example_message: "/EXAMPLE_PATH_MESSAGE",
                 path_example_datamap: "/EXAMPLE_PATH_DATAMAP",
 
+                path_message_main: "/MESSAGE_MAIN",
+                path_message_loading: "/MESSAGE_LOADING",
+                path_message_gamechoose: "/MESSAGE_GAMECHOOSE",
+                path_data_gamechoose: "/DATA_GAMECHOOSE",
+                path_message_highscore: "/MESSAGE_HIGHSCORE",
+                path_message_gameresult: "/MESSAGE_GAMERESULT",
+                path_message_selectoption: "/MESSAGE_SELECTOPTION",
+
+
                 datamap_example_image: "EXAMPLE_IMAGE_NAME_IN_DATAMAP",
         ]
     }

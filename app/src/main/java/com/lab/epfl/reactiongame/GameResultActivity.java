@@ -80,4 +80,12 @@ public class GameResultActivity extends AppCompatActivity {
         text += mf.format(milliseconds);
         return text;
     }
+
+    @Override
+    public void onBackPressed() {
+        Intent auxIntent = new Intent(this, WearService.class);
+        auxIntent.setAction(WearService.ACTION_SEND.CLOSE_GAMERESULT.name());
+        startService(auxIntent);
+        super.onBackPressed();
+    }
 }

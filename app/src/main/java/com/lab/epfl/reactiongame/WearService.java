@@ -30,6 +30,7 @@ import com.google.android.gms.wearable.WearableListenerService;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 public class WearService extends WearableListenerService {
@@ -39,7 +40,9 @@ public class WearService extends WearableListenerService {
 
     // Actions defined for the onStartCommand(...)
     public enum ACTION_SEND {
-        EXAMPLE_SEND_STRING, EXAMPLE_SEND_BITMAP
+        EXAMPLE_SEND_STRING, EXAMPLE_SEND_BITMAP, OPEN_LOADING, OPEN_HIGHSCORES,
+        CLOSE_HIGHSCORES, OPEN_GAMECHOOSE, CLOSE_LOADING, CLOSE_GAMERESULT,
+        CLOSE_GAMECHOOSE, UPDATE_GAMECHOOSE, OPEN_GAMERESULT
     }
 
     @Override
@@ -72,6 +75,46 @@ public class WearService extends WearableListenerService {
                         .putAsset(BuildConfig.W_datamap_example_image, iconAsset);
                 sendPutDataMapRequest(putDataMapRequest);
                 break;
+            case OPEN_LOADING:
+                sendMessage("loading", BuildConfig.W_path_message_main);
+                break;
+            case OPEN_HIGHSCORES:
+                sendMessage("highscores", BuildConfig.W_path_message_main);
+                break;
+            case CLOSE_HIGHSCORES:
+                sendMessage("close", BuildConfig.W_path_message_highscore);
+                break;
+            case OPEN_GAMECHOOSE:
+                sendMessage("choose", BuildConfig.W_path_message_loading);
+                break;
+            case CLOSE_LOADING:
+                sendMessage("close", BuildConfig.W_path_message_loading);
+                break;
+            case CLOSE_GAMERESULT:
+                sendMessage("close", BuildConfig.W_path_message_gameresult);
+                break;
+            case OPEN_GAMERESULT:
+                String isWinner = intent.getStringExtra("isWinner");
+                sendMessage(isWinner, BuildConfig.W_path_message_gamechoose);
+                break;
+            case CLOSE_GAMECHOOSE:
+                sendMessage("close", BuildConfig.W_path_message_gamechoose);
+                break;
+            case UPDATE_GAMECHOOSE:
+                ArrayList<String> newData = new ArrayList<>();
+                // Create the datamap
+                for (int i = 0; i<9; i++) {
+                    newData.add(intent.getStringExtra("color" + i));
+                    newData.add(intent.getStringExtra("text" + i));
+                    newData.add(intent.getStringExtra("image" + i));
+                }
+//                Log.e("TEST++", newData.toString());
+                PutDataMapRequest auxDataMapRequest = PutDataMapRequest
+                        .create(BuildConfig.W_path_data_gamechoose);
+                auxDataMapRequest
+                        .getDataMap().putStringArrayList("data", newData);
+                sendPutDataMapRequest(auxDataMapRequest);
+                break;
             default:
                 Log.w(TAG, "Unknown action");
                 break;
@@ -91,6 +134,12 @@ public class WearService extends WearableListenerService {
                 + "\", from node " + messageEvent.getSourceNodeId());
 
         switch (path) {
+            case BuildConfig.W_path_message_selectoption:
+                Log.e("WEAR1++", data);
+                Intent intentSelect = new Intent(GameChooseActivity
+                        .BROADCAST_SELECTOPTION);
+                intentSelect.putExtra("indexOption", data);
+                LocalBroadcastManager.getInstance(this).sendBroadcast(intentSelect);
             default:
                 Log.w(TAG, "Received a message for unknown path " + path + " : " + data);
         }

@@ -6,18 +6,17 @@
     android:layout_height="match_parent"
     android:background="@color/dark_grey"
     android:padding="@dimen/box_inset_layout_padding"
-    tools:context=".MainActivity"
+    tools:context=".GameResult"
     tools:deviceIds="wear">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
         <ImageView
-            android:id="@+id/imageMain"
+            android:id="@+id/imageResult"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:src="@drawable/log_in_cropped"
+            android:src="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

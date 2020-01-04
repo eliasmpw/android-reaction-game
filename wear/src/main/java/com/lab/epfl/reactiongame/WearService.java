@@ -30,6 +30,7 @@ import com.google.android.gms.wearable.WearableListenerService;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 public class WearService extends WearableListenerService {
@@ -39,6 +40,7 @@ public class WearService extends WearableListenerService {
 
     // Actions defined for the onStartCommand(...)
     public enum ACTION_SEND {
+        SELECT_OPTION
     }
 
     @Override
@@ -52,6 +54,12 @@ public class WearService extends WearableListenerService {
         ACTION_SEND action = ACTION_SEND.valueOf(intent.getAction());
 
         switch (action) {
+            case SELECT_OPTION:
+                String indexOption = intent.getStringExtra("indexOption");
+
+                Log.e("WEAR2++", indexOption);
+                sendMessage(indexOption, BuildConfig.W_path_message_selectoption);
+                break;
             default:
                 Log.w(TAG, "Unknown action");
                 break;
@@ -71,6 +79,86 @@ public class WearService extends WearableListenerService {
                 + "\", from node " + messageEvent.getSourceNodeId());
 
         switch (path) {
+            case BuildConfig.W_path_message_main:
+                switch (data) {
+                    case "loading":
+                        Intent intentLoading = new Intent(MainActivity
+                                .BROADCAST_LOADING);
+                        LocalBroadcastManager.getInstance(this).sendBroadcast(intentLoading);
+                        break;
+                    case "highscores":
+                        Intent intentHighscores = new Intent(MainActivity
+                                .BROADCAST_HIGHSCORES);
+                        LocalBroadcastManager.getInstance(this).sendBroadcast(intentHighscores);
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case BuildConfig.W_path_message_highscore:
+                switch (data) {
+                    case "close":
+                        Intent intentClose = new Intent(HighscoresActivity
+                                .BROADCAST_CLOSE_HIGHSCORE);
+                        LocalBroadcastManager.getInstance(this).sendBroadcast(intentClose);
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case BuildConfig.W_path_message_loading:
+                switch (data) {
+                    case "choose":
+                        Intent intentLoading = new Intent(LoadingActivity
+                                .BROADCAST_CHOOSE);
+                        LocalBroadcastManager.getInstance(this).sendBroadcast(intentLoading);
+                        Intent intentLoading2 = new Intent(MainActivity
+                                .BROADCAST_CHOOSEFROMMAIN);
+                        LocalBroadcastManager.getInstance(this).sendBroadcast(intentLoading2);
+                        break;
+                    case "close":
+                        Intent intentHighscores = new Intent(LoadingActivity
+                                .BROADCAST_CLOSE_LOADING);
+                        LocalBroadcastManager.getInstance(this).sendBroadcast(intentHighscores);
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case BuildConfig.W_path_message_gameresult:
+                switch (data) {
+                    case "close":
+                        Intent intentClose = new Intent(GameResult
+                                .BROADCAST_CLOSE_GAMERESULT);
+                        LocalBroadcastManager.getInstance(this).sendBroadcast(intentClose);
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case BuildConfig.W_path_message_gamechoose:
+                switch (data) {
+                    case "true":
+                        Intent intentWinner = new Intent(GameChooseActivity
+                                .BROADCAST_GAMERESULT);
+                        intentWinner.putExtra("isWinner", true);
+                        LocalBroadcastManager.getInstance(this).sendBroadcast(intentWinner);
+                        break;
+                    case "false":
+                        Intent intentLoser = new Intent(GameChooseActivity
+                                .BROADCAST_GAMERESULT);
+                        intentLoser.putExtra("isWinner", false);
+                        LocalBroadcastManager.getInstance(this).sendBroadcast(intentLoser);
+                        break;
+                    case "close":
+                        Intent intentCloseGameChoose = new Intent(GameChooseActivity
+                                .BROADCAST_CLOSEGAMECHOOSE);
+                        LocalBroadcastManager.getInstance(this).sendBroadcast(intentCloseGameChoose);
+                        break;
+                    default:
+                        break;
+                }
+                break;
             case BuildConfig.W_path_example_message:
                 // The message received is already extracted in the `data` variable
                 Intent intent = new Intent(MainActivity
@@ -116,6 +204,20 @@ public class WearService extends WearableListenerService {
                                 .EXAMPLE_BROADCAST_NAME_FOR_NOTIFICATION_IMAGE_DATAMAP_RECEIVED);
                         decodeAndBroadcastBitmapFromAsset(asset, intent, MainActivity
                                 .EXAMPLE_INTENT_IMAGE_NAME_WHEN_BROADCAST);
+                        break;
+                    case BuildConfig.W_path_data_gamechoose:
+                        // Extract the data behind the key you know contains data
+                        ArrayList<String> newData = dataMapItem
+                                .getDataMap()
+                                .getStringArrayList("data");
+                        Intent intentUpdate = new Intent(GameChooseActivity
+                                .BROADCAST_UPDATEDATA);
+                        for (int i = 0; i<9; i++) {
+                            intentUpdate.putExtra("color" + i, newData.get(3 * i));
+                            intentUpdate.putExtra("text" + i, newData.get(3 * i + 1));
+                            intentUpdate.putExtra("image" + i, newData.get(3 * i + 2));
+                        }
+                        LocalBroadcastManager.getInstance(WearService.this).sendBroadcast(intentUpdate);
                         break;
                     default:
                         Log.v(TAG, "Data changed for unhandled path: " + uri);

@@ -1,6 +1,9 @@
 package com.lab.epfl.reactiongame;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -12,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -60,6 +64,9 @@ public class GameChooseActivity extends AppCompatActivity {
     private String userID;
     private Chronometer myTime;
     private int testInt = 0;
+    public static final String
+            BROADCAST_SELECTOPTION =
+            "BROADCAST_SELECTOPTION";
 
     private HashMap<DatabaseReference, ValueEventListener> listenerHashMap = new HashMap<>();
     public static void removeValueEventListener(HashMap<DatabaseReference, ValueEventListener> hashMap) {
@@ -69,6 +76,14 @@ public class GameChooseActivity extends AppCompatActivity {
             databaseReference.removeEventListener(valueEventListener);
         }
     }
+
+    private BroadcastReceiver selectOptionBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String indexOption = intent.getStringExtra("indexOption");
+            handleOptionSelected(Integer.parseInt(indexOption));
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,6 +149,7 @@ public class GameChooseActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),
                             "Other player left the match",
                             Toast.LENGTH_LONG).show();
+                    closeGameChooseWear();
                     finish();
                     return;
                 }
@@ -217,6 +233,7 @@ public class GameChooseActivity extends AppCompatActivity {
                                         intent.putExtra("highscore", hasHighscore);
                                         intent.putExtra("time", score);
                                         startActivity(intent);
+                                        openGameResultWear(playerNumber == 1);
                                         removeGameInProgress();
                                         finish();
                                     }
@@ -278,6 +295,7 @@ public class GameChooseActivity extends AppCompatActivity {
                                         intent.putExtra("highscore", hasHighscore);
                                         intent.putExtra("time", score);
                                         startActivity(intent);
+                                        openGameResultWear(playerNumber == 2);
                                         removeGameInProgress();
                                         finish();
                                     }
@@ -355,6 +373,7 @@ public class GameChooseActivity extends AppCompatActivity {
             }
 
             public void onFinish() {
+                updateAnswersWear();
                 TextView question = findViewById(R.id.Question);
                 question.setText(game.question);
                 question.setTextColor(Color.WHITE);
@@ -456,6 +475,10 @@ public class GameChooseActivity extends AppCompatActivity {
         Button field = (Button) view;
         int id = field.getId();
         int position = fieldIDs.indexOf(id);
+        handleOptionSelected(position);
+    }
+
+    public void handleOptionSelected(int position) {
         myResponseIsReady = true;
         for (int buttonId: fieldIDs) {
             findViewById(buttonId).setClickable(false);
@@ -605,7 +628,6 @@ public class GameChooseActivity extends AppCompatActivity {
                 mapStringToResource.put("Light Blue", Color.rgb(153, 255, 255));
                 mapStringToResource.put("Dark Blue", Color.rgb(0, 0, 255));
                 mapStringToResource.put("Black", Color.BLACK);
-                mapStringToResource.put("Red", Color.RED);
                 mapStringToResource.put("Orange", Color.rgb(255, 153, 51));
                 mapStringToResource.put("Brown", Color.rgb(153, 76, 0));
                 mapStringToResource.put("Pink", Color.rgb(255, 153, 204));
@@ -633,8 +655,53 @@ public class GameChooseActivity extends AppCompatActivity {
         } else {    // this guy is serious
             // clean up
             removeValueEventListener(listenerHashMap);
+            closeGameChooseWear();
             removeGameInProgress();
             super.onBackPressed();       // bye
         }
+    }
+
+    public void openGameResultWear(Boolean isWinner) {
+        Intent auxIntent = new Intent(this, WearService.class);
+        auxIntent.setAction(WearService.ACTION_SEND.OPEN_GAMERESULT.name());
+        auxIntent.putExtra("isWinner", Boolean.toString(isWinner));
+        startService(auxIntent);
+    }
+
+    public void closeGameChooseWear() {
+        Intent auxIntent = new Intent(this, WearService.class);
+        auxIntent.setAction(WearService.ACTION_SEND.CLOSE_GAMECHOOSE.name());
+        startService(auxIntent);
+    }
+
+    public void updateAnswersWear() {
+        Intent auxIntent = new Intent(this, WearService.class);
+        auxIntent.setAction(WearService.ACTION_SEND.UPDATE_GAMECHOOSE.name());
+        for (int i = 0; i<9; i++) {
+            GameOption auxAnswer = game.answers.get("+" + i);
+            auxIntent.putExtra("color" + i, auxAnswer.color == null ? "" : auxAnswer.color);
+            auxIntent.putExtra("text" + i, auxAnswer.text == null ? "" : auxAnswer.text);
+            auxIntent.putExtra("image" + i, auxAnswer.image == null ? "" : auxAnswer.image);
+        }
+        startService(auxIntent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Register broadcasts from WearService
+        LocalBroadcastManager
+                .getInstance(this)
+                .registerReceiver(selectOptionBroadcastReceiver, new IntentFilter(
+                        BROADCAST_SELECTOPTION));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Un-register broadcasts from WearService
+        LocalBroadcastManager
+                .getInstance(this)
+                .unregisterReceiver(selectOptionBroadcastReceiver);
     }
 }

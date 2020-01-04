@@ -140,6 +140,7 @@ public class LoadingActivity extends AppCompatActivity {
                                             Intent gameIntent;
                                             if (gameType < 3) {
                                                 gameIntent = new Intent(LoadingActivity.this, GameChooseActivity.class);
+                                                openGameChooseWear();
                                             } else {
                                                 gameIntent = new Intent(LoadingActivity.this, GameFourActivity.class);
                                             }
@@ -214,6 +215,7 @@ public class LoadingActivity extends AppCompatActivity {
 
                                 if (gameType < 3) {
                                     gameIntent = new Intent(LoadingActivity.this, GameChooseActivity.class);
+                                    openGameChooseWear();
                                 } else {
                                     gameIntent = new Intent(LoadingActivity.this, GameFourActivity.class);
                                 }
@@ -337,8 +339,20 @@ public class LoadingActivity extends AppCompatActivity {
             // clean up
             removeNameToLookingForGameDB(userID, lookingforgame + gameType);
             removeValueEventListener(listenerHashMap, queryHashMap);
+            closeLoadingWear();
             super.onBackPressed();       // bye
         }
     }
 
+    public void openGameChooseWear() {
+        Intent auxIntent = new Intent(this, WearService.class);
+        auxIntent.setAction(WearService.ACTION_SEND.OPEN_GAMECHOOSE.name());
+        startService(auxIntent);
+    }
+
+    public void closeLoadingWear() {
+        Intent auxIntent = new Intent(this, WearService.class);
+        auxIntent.setAction(WearService.ACTION_SEND.CLOSE_LOADING.name());
+        startService(auxIntent);
+    }
 }

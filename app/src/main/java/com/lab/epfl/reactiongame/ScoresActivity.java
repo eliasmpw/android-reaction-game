@@ -1,5 +1,6 @@
 package com.lab.epfl.reactiongame;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -111,5 +112,13 @@ public class ScoresActivity extends AppCompatActivity implements ScoreGame1Fragm
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent auxIntent = new Intent(this, WearService.class);
+        auxIntent.setAction(WearService.ACTION_SEND.CLOSE_HIGHSCORES.name());
+        startService(auxIntent);
+        super.onBackPressed();
     }
 }
