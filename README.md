@@ -2,7 +2,7 @@
 
 ## Overview
 
-The aim of this project is to develop a reaction game between in android for two players, with interaction with Android Wear service and Firebase. 
+The aim of this project is to develop a reaction game in android for two players, including an interaction with Android Wear service and Firebase. 
 This repository contains all the files required to install and run the application.
 
 ## Structure
