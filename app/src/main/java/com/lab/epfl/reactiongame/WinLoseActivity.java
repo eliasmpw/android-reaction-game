@@ -13,6 +13,7 @@ public class WinLoseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_win_lose);
         ImageView resultImage = findViewById(R.id.resultImage);
+        TextView ifBestResult = findViewById(R.id.ifbestresult);
 
         long yourtime;
         yourtime = (long)getIntent().getSerializableExtra("yourTime");
@@ -31,6 +32,9 @@ public class WinLoseActivity extends AppCompatActivity {
         else {
             resultImage.setImageDrawable(getDrawable(R.drawable.winimage));
             textView.setText("Your react time is " + (int) yourtime + " ms!\nYou WIN :)");
+        }
+        if (ifbest == 0) {
+            ifBestResult.setText("");
         }
     }
 }

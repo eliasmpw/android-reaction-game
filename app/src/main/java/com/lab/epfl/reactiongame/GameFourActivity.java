@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.database.DataSnapshot;
@@ -32,7 +33,6 @@ public class GameFourActivity extends AppCompatActivity {
     private long bestTime;
     private long oppoTime;
     private boolean result;
-    private int ifbest = 0;
 
     private final String TAG = this.getClass().getSimpleName();
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -129,14 +129,63 @@ public class GameFourActivity extends AppCompatActivity {
                             else
                                 result = false;
 
-                            Intent intent = new Intent(GameFourActivity.this, WinLoseActivity.class);
-                            intent.putExtra("result", result);
-                            intent.putExtra("yourTime", yourTime);
-                            intent.putExtra("ifbest",ifbest);
-                            startActivity(intent);
-                            removeValueEventListener(listenerHashMap);
-                            removeGameInProgress();
-                            finish();
+                            final long score = yourTime;
+                            final DatabaseReference highscoreRef;
+                            highscoreRef = database.getReference("highscores/Game" + (gameType + 1));
+
+                            ValueEventListener valueEventListener = new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    Boolean hasHighscore = false;
+                                    GameHighscores highScores = dataSnapshot.getValue(GameHighscores.class);
+                                    if (score < Long.parseLong(highScores.user1.score)) {
+                                        highScores.user5 = highScores.user4;
+                                        highScores.user4 = highScores.user3;
+                                        highScores.user3 = highScores.user2;
+                                        highScores.user2 = highScores.user1;
+                                        highScores.user1 = new SingleScore(Long.toString(score), userID, name);
+                                        highscoreRef.setValue(highScores);
+                                        hasHighscore = true;
+                                    } else if (score < Long.parseLong(highScores.user2.score)) {
+                                        highScores.user5 = highScores.user4;
+                                        highScores.user4 = highScores.user3;
+                                        highScores.user3 = highScores.user2;
+                                        highScores.user2 = new SingleScore(Long.toString(score), userID, name);
+                                        highscoreRef.setValue(highScores);
+                                        hasHighscore = true;
+                                    } else if (score < Long.parseLong(highScores.user3.score)) {
+                                        highScores.user5 = highScores.user4;
+                                        highScores.user4 = highScores.user3;
+                                        highScores.user3 = new SingleScore(Long.toString(score), userID, name);
+                                        highscoreRef.setValue(highScores);
+                                        hasHighscore = true;
+                                    } else if (score < Long.parseLong(highScores.user4.score)) {
+                                        highScores.user5 = highScores.user4;
+                                        highScores.user4 = new SingleScore(Long.toString(score), userID, name);
+                                        highscoreRef.setValue(highScores);
+                                        hasHighscore = true;
+                                    } else if (score < Long.parseLong(highScores.user5.score)) {
+                                        highScores.user5 = new SingleScore(Long.toString(score), userID, name);
+                                        highscoreRef.setValue(highScores);
+                                        hasHighscore = true;
+                                    }
+
+                                    Intent intent = new Intent(GameFourActivity.this, WinLoseActivity.class);
+                                    intent.putExtra("result", result);
+                                    intent.putExtra("yourTime", yourTime);
+                                    intent.putExtra("ifbest", hasHighscore ? 1 : 0 );
+                                    startActivity(intent);
+                                    removeValueEventListener(listenerHashMap);
+                                    removeGameInProgress();
+                                    finish();
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            };
+                            highscoreRef.addListenerForSingleValueEvent(valueEventListener);
                         }
                     }
                     // for player2
@@ -148,14 +197,63 @@ public class GameFourActivity extends AppCompatActivity {
                             else
                                 result = false;
 
-                            Intent intent = new Intent(GameFourActivity.this, WinLoseActivity.class);
-                            intent.putExtra("result", result);
-                            intent.putExtra("yourTime", yourTime);
-                            intent.putExtra("ifbest",ifbest);
-                            startActivity(intent);
-                            removeValueEventListener(listenerHashMap);
-                            removeGameInProgress();
-                            finish();
+                            final long score = yourTime;
+                            final DatabaseReference highscoreRef;
+                            highscoreRef = database.getReference("highscores/Game" + (gameType + 1));
+
+                            ValueEventListener valueEventListener = new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    Boolean hasHighscore = false;
+                                    GameHighscores highScores = dataSnapshot.getValue(GameHighscores.class);
+                                    if (score < Long.parseLong(highScores.user1.score)) {
+                                        highScores.user5 = highScores.user4;
+                                        highScores.user4 = highScores.user3;
+                                        highScores.user3 = highScores.user2;
+                                        highScores.user2 = highScores.user1;
+                                        highScores.user1 = new SingleScore(Long.toString(score), userID, name);
+                                        highscoreRef.setValue(highScores);
+                                        hasHighscore = true;
+                                    } else if (score < Long.parseLong(highScores.user2.score)) {
+                                        highScores.user5 = highScores.user4;
+                                        highScores.user4 = highScores.user3;
+                                        highScores.user3 = highScores.user2;
+                                        highScores.user2 = new SingleScore(Long.toString(score), userID, name);
+                                        highscoreRef.setValue(highScores);
+                                        hasHighscore = true;
+                                    } else if (score < Long.parseLong(highScores.user3.score)) {
+                                        highScores.user5 = highScores.user4;
+                                        highScores.user4 = highScores.user3;
+                                        highScores.user3 = new SingleScore(Long.toString(score), userID, name);
+                                        highscoreRef.setValue(highScores);
+                                        hasHighscore = true;
+                                    } else if (score < Long.parseLong(highScores.user4.score)) {
+                                        highScores.user5 = highScores.user4;
+                                        highScores.user4 = new SingleScore(Long.toString(score), userID, name);
+                                        highscoreRef.setValue(highScores);
+                                        hasHighscore = true;
+                                    } else if (score < Long.parseLong(highScores.user5.score)) {
+                                        highScores.user5 = new SingleScore(Long.toString(score), userID, name);
+                                        highscoreRef.setValue(highScores);
+                                        hasHighscore = true;
+                                    }
+
+                                    Intent intent = new Intent(GameFourActivity.this, WinLoseActivity.class);
+                                    intent.putExtra("result", result);
+                                    intent.putExtra("yourTime", yourTime);
+                                    intent.putExtra("ifbest", hasHighscore ? 1 : 0 );
+                                    startActivity(intent);
+                                    removeValueEventListener(listenerHashMap);
+                                    removeGameInProgress();
+                                    finish();
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            };
+                            highscoreRef.addListenerForSingleValueEvent(valueEventListener);
                         }
                     }
                 }
