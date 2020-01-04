@@ -57,7 +57,7 @@ public class WearService extends WearableListenerService {
             case SELECT_OPTION:
                 String indexOption = intent.getStringExtra("indexOption");
 
-                Log.e("WEAR2++", indexOption);
+//                Log.e("WEAR2++", indexOption);
                 sendMessage(indexOption, BuildConfig.W_path_message_selectoption);
                 break;
             default:

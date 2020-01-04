@@ -76,7 +76,7 @@ public class GameChooseActivity extends WearableActivity {
                 color = intent.getStringExtra("color" + 0);
                 text = intent.getStringExtra("text" + 0);
                 image = intent.getStringExtra("image" + 0);
-                Log.e("OOOH++", "-"+color + "-"+text + "-" + image+"-");
+//                Log.e("OOOH++", "-"+color + "-"+text + "-" + image+"-");
                 if (!image.equals("")) {
                     gameType = 2;
                 } else if(!color.equals("")) {

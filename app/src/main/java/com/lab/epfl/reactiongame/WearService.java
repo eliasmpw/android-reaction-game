@@ -135,7 +135,7 @@ public class WearService extends WearableListenerService {
 
         switch (path) {
             case BuildConfig.W_path_message_selectoption:
-                Log.e("WEAR1++", data);
+//                Log.e("WEAR1++", data);
                 Intent intentSelect = new Intent(GameChooseActivity
                         .BROADCAST_SELECTOPTION);
                 intentSelect.putExtra("indexOption", data);
