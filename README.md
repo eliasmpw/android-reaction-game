@@ -3,7 +3,7 @@
 ## Overview
 
 The aim of this project is to develop a reaction game between in android for two players, with interaction with Android Wear service and Firebase. 
-This repository contains all the files required to excecute and run the application.
+This repository contains all the files required to install and run the application.
 
 ## Structure
 ```
@@ -84,7 +84,7 @@ This repository contains all the files required to excecute and run the applicat
 ├── README.md                                       <- Readme file
 
 ```
-```
+
 
 ## Setup
 
@@ -93,11 +93,11 @@ This repository contains all the files required to excecute and run the applicat
 2. Open AndroidStudio and open the project you unzipped in step 1
 
 3. To install the app in a phone/tablet 
-  - Make sure that the debugging option is enabled on the device : https://developer.android.com/studio/debug/dev-options
+  - Make sure that the debugging option is enabled on the device :https://developer.android.com/studio/debug/dev-options
   - Connect your phone/tablet to the computer
   - On android studio you should be able to see your device connected 
   - Select app and then run to install the app on the device
-  
+
 4. To install the app in a smartwatch 
   - Make sure that the debugging option is enabled on the device : https://developer.android.com/training/wearables/apps/creating#set-up-watch
   - Connect your smartwatch to the computer 
@@ -128,4 +128,3 @@ This repository contains all the files required to excecute and run the applicat
 - Andres Ivan Montero Cassab
 - Wang Shu
 
-```
