@@ -36,6 +36,24 @@ public class MainActivity extends WearableActivity {
     public static final String
             BROADCAST_CHOOSEFROMMAIN =
             "BROADCAST_CHOOSEFROMMAIN";
+    public static final String
+            BROADCAST_GAME4 =
+            "BROADCAST_GAME4";
+    public static final String
+            BROADCAST_GAME4_CHANGEIMAGE =
+            "BROADCAST_GAME4_CHANGEIMAGE";
+    public static final String
+            BROADCAST_GAME4_CLOSE =
+            "BROADCAST_GAME4_CLOSE";
+    public static final String
+            BROADCAST_GAME4_RESULT =
+            "BROADCAST_GAME4_RESULT";
+    public static final String
+            BROADCAST_GAME4_RESULTSHOW =
+            "BROADCAST_GAME4_RESULTHOW";
+    public static final String
+            BROADCAST_GAME4_RESULTCLOSE =
+            "BROADCAST_GAME4_RESULTCLOSE";
 
     private BroadcastReceiver loadingBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -56,6 +74,13 @@ public class MainActivity extends WearableActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             Intent auxIntent = new Intent(MainActivity.this, GameChooseActivity.class);
+            startActivity(auxIntent);
+        }
+    };
+    private BroadcastReceiver Game4BroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Intent auxIntent = new Intent(MainActivity.this, GameFourActivity.class);
             startActivity(auxIntent);
         }
     };
@@ -111,6 +136,10 @@ public class MainActivity extends WearableActivity {
                 .getInstance(this)
                 .registerReceiver(chooseFromMainBroadcastReceiver, new IntentFilter(
                         BROADCAST_CHOOSEFROMMAIN));
+        LocalBroadcastManager
+                .getInstance(this)
+                .registerReceiver(Game4BroadcastReceiver, new IntentFilter(
+                        BROADCAST_GAME4));
     }
 
     @Override
@@ -127,5 +156,8 @@ public class MainActivity extends WearableActivity {
         LocalBroadcastManager
                 .getInstance(this)
                 .unregisterReceiver(chooseFromMainBroadcastReceiver);
+        LocalBroadcastManager
+                .getInstance(this)
+                .unregisterReceiver(Game4BroadcastReceiver);
     }
 }

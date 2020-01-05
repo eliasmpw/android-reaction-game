@@ -1,6 +1,9 @@
 package com.lab.epfl.reactiongame;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -13,6 +16,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -38,6 +42,7 @@ public class GameFourActivity extends AppCompatActivity {
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private static DatabaseReference dataGameRef;
     private boolean waitingForOponent;
+    private boolean WearImagceChanged;
     private String name;
     private String userID;
     private int playerNumber;
@@ -45,12 +50,17 @@ public class GameFourActivity extends AppCompatActivity {
     private int gameType;
 
     int imageNum = 0;
-    int correctNum = 0;
+    public int correctNum = 0;
     private TextView testhandle;
     private TextView game4guide;
     private ImageView hintImage;
     private ImageButton reactButton;
     private final int gamesize = 6; // Number of images
+
+    public static final String
+            BROADCAST_GAME4_REACT =
+            "BROADCAST_GAME4_REACT";
+
 
     private HashMap<DatabaseReference, ValueEventListener> listenerHashMap = new HashMap<>();
     public static void removeValueEventListener(HashMap<DatabaseReference, ValueEventListener> hashMap) {
@@ -60,6 +70,28 @@ public class GameFourActivity extends AppCompatActivity {
             databaseReference.removeEventListener(valueEventListener);
         }
     }
+
+    private BroadcastReceiver WearReact = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(waitingForOponent == false) {
+                if (imageNum == correctNum) {
+                    // player make correct choice
+                    long endTime = System.currentTimeMillis(); // record the end time of the game
+                    yourTime = (endTime - startTime);
+                } else {
+                    yourTime = 9999;
+                }
+                // upload your time
+                if (playerNumber == 1)
+                    dataGameRef.child("time1").setValue(yourTime);
+                else
+                    dataGameRef.child("time2").setValue(yourTime);
+
+                waitingForOponent = true;
+            }
+        }
+    };
 
     private ArrayList<String> imageNames = new ArrayList() {
         {
@@ -75,6 +107,15 @@ public class GameFourActivity extends AppCompatActivity {
     Handler handler=new Handler() {
         @Override
         public void handleMessage(Message msg) {
+            if(WearImagceChanged == false) {
+                // change image on wear
+                Intent changeimageIntent = new Intent(GameFourActivity.this, WearService.class);
+                changeimageIntent.putExtra("correctNum", String.valueOf(correctNum));
+                changeimageIntent.setAction(WearService.ACTION_SEND.GAME4_CHANGEIMAGE.name());
+                startService(changeimageIntent);
+                WearImagceChanged = true;
+            }
+
             if(waitingForOponent == false) {
                 super.handleMessage(msg);
                 testhandle.setText("GO!");
@@ -83,10 +124,16 @@ public class GameFourActivity extends AppCompatActivity {
                 hintImage.setImageDrawable(getDrawable(Integer.parseInt(imageNames.get(imageNum))));
                 if (imageNum == correctNum)
                     startTime = System.currentTimeMillis(); // record the start time of the game
+
+
+
                 sendEmptyMessageDelayed(1, 2000);
             }
             else if(waitingForOponent == true){
-                testhandle.setText(yourTime+" ms");
+                if(yourTime != 9999)
+                    testhandle.setText(yourTime+" ms");
+                else
+                    testhandle.setText("Wrong :(");
                 game4guide.setText("Please wait for your opponent...");
             }
         };
@@ -106,8 +153,6 @@ public class GameFourActivity extends AppCompatActivity {
         Log.v(TAG, Integer.toString(playerNumber));
 
         setInitialVariables();
-
-        startTime = System.currentTimeMillis(); // initialize the start time of the game
 
         ValueEventListener playerTimeListener = new ValueEventListener() {
             @Override
@@ -268,8 +313,18 @@ public class GameFourActivity extends AppCompatActivity {
         dataGameRef.addValueEventListener(playerTimeListener);
         listenerHashMap.put(dataGameRef, playerTimeListener);
 
+        startTime = System.currentTimeMillis(); // initialize the start time of the game
+
+        //start game on wear
+        Intent auxIntent = new Intent(this, WearService.class);
+        auxIntent.setAction(WearService.ACTION_SEND.OPEN_GAME4.name());
+        startService(auxIntent);
+
+
         // start game
-        handler.sendEmptyMessageDelayed(1,2000);
+        handler.sendEmptyMessageDelayed(1,3000);
+
+
     }
 
     private void removeGameInProgress() {
@@ -290,6 +345,7 @@ public class GameFourActivity extends AppCompatActivity {
         reactButton.setClickable(false);
 
         waitingForOponent = false;
+        WearImagceChanged = false;
     }
 
     public void Click2React(View view){
@@ -302,6 +358,12 @@ public class GameFourActivity extends AppCompatActivity {
             } else {
                 yourTime = 9999;
             }
+
+            //
+            Intent go2resultIntent = new Intent(GameFourActivity.this, WearService.class);
+            go2resultIntent.setAction(WearService.ACTION_SEND.GAME4_RESULT.name());
+            startService(go2resultIntent);
+
             // upload your time
             if (playerNumber == 1)
                 dataGameRef.child("time1").setValue(yourTime);
@@ -311,7 +373,6 @@ public class GameFourActivity extends AppCompatActivity {
             waitingForOponent = true;
         }
     }
-
 
 
     private long backPressedTime = 0;    // used by onBackPressed()
@@ -327,7 +388,33 @@ public class GameFourActivity extends AppCompatActivity {
             // clean up
             removeValueEventListener(listenerHashMap);
             removeGameInProgress();
+            closeGameFourWear();
             super.onBackPressed();       // bye
         }
+    }
+
+    public void closeGameFourWear() {
+        Intent auxIntent = new Intent(this, WearService.class);
+        auxIntent.setAction(WearService.ACTION_SEND.CLOSE_GAME4.name());
+        startService(auxIntent);
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Register broadcasts from WearService
+        LocalBroadcastManager
+                .getInstance(this)
+                .registerReceiver(WearReact, new IntentFilter(
+                        BROADCAST_GAME4_REACT));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Un-register broadcasts from WearService
+        LocalBroadcastManager
+                .getInstance(this)
+                .unregisterReceiver(WearReact);
+
     }
 }

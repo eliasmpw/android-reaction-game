@@ -47,6 +47,11 @@ allprojects {
                 path_message_highscore: "/MESSAGE_HIGHSCORE",
                 path_message_gameresult: "/MESSAGE_GAMERESULT",
                 path_message_selectoption: "/MESSAGE_SELECTOPTION",
+                path_message_game4: "MESSAGE_GAME4",
+                path_message_game4_changeimage: "MESSAGE_GAME4_CHANGEIMAGE",
+                path_message_game4_react: "MESSAGE_GAME4_REACT",
+                path_message_game4_result: "MESSAGE_GAME4_RESULT",
+                path_message_game4_resultclose: "MESSAGE_GAME4_RESULTCLOSE",
 
 
                 datamap_example_image: "EXAMPLE_IMAGE_NAME_IN_DATAMAP",

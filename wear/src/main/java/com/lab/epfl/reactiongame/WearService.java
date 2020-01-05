@@ -40,7 +40,7 @@ public class WearService extends WearableListenerService {
 
     // Actions defined for the onStartCommand(...)
     public enum ACTION_SEND {
-        SELECT_OPTION
+        SELECT_OPTION,GAME4_REACT
     }
 
     @Override
@@ -59,6 +59,9 @@ public class WearService extends WearableListenerService {
 
 //                Log.e("WEAR2++", indexOption);
                 sendMessage(indexOption, BuildConfig.W_path_message_selectoption);
+                break;
+            case GAME4_REACT:
+                sendMessage("react", BuildConfig.W_path_message_selectoption);
                 break;
             default:
                 Log.w(TAG, "Unknown action");
@@ -167,6 +170,44 @@ public class WearService extends WearableListenerService {
                         .EXAMPLE_INTENT_STRING_NAME_WHEN_BROADCAST, data);
                 LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
                 break;
+            case BuildConfig.W_path_message_game4:
+                switch(data){
+                    case "startgame4":
+                        Intent intentGame4 = new Intent(MainActivity
+                                .BROADCAST_GAME4);
+                        LocalBroadcastManager.getInstance(this).sendBroadcast(intentGame4);
+                        break;
+                    case "close":
+                        Intent closeGame4 = new Intent(MainActivity
+                                .BROADCAST_GAME4_CLOSE);
+                        LocalBroadcastManager.getInstance(this).sendBroadcast(closeGame4);
+                        break;
+                    case "go2result":
+                        Intent go2result = new Intent(MainActivity
+                                .BROADCAST_GAME4_RESULT);
+                        LocalBroadcastManager.getInstance(this).sendBroadcast(go2result);
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case BuildConfig.W_path_message_game4_changeimage:
+                Intent intentGame4changeimage = new Intent(MainActivity
+                        .BROADCAST_GAME4_CHANGEIMAGE);
+                intentGame4changeimage.putExtra("correctNum",data);
+                LocalBroadcastManager.getInstance(this).sendBroadcast(intentGame4changeimage);
+                break;
+            case BuildConfig.W_path_message_game4_result:
+                Intent intentGame4result = new Intent(MainActivity
+                        .BROADCAST_GAME4_RESULTSHOW);
+                intentGame4result.putExtra("result", data);
+                LocalBroadcastManager.getInstance(this).sendBroadcast(intentGame4result);
+                break;
+            case BuildConfig.W_path_message_game4_resultclose:
+                Intent closeGame4result = new Intent(MainActivity
+                            .BROADCAST_GAME4_RESULTCLOSE);
+                LocalBroadcastManager.getInstance(this).sendBroadcast(closeGame4result);
+            break;
             default:
                 Log.w(TAG, "Received a message for unknown path " + path + " : " + data);
         }

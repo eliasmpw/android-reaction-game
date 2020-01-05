@@ -1,14 +1,13 @@
 package com.lab.epfl.reactiongame;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.wearable.activity.WearableActivity;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 public class LoadingActivity extends WearableActivity {
     public static final String
@@ -17,11 +16,22 @@ public class LoadingActivity extends WearableActivity {
     public static final String
             BROADCAST_CLOSE_LOADING =
             "BROADCAST_CLOSE_LOADING";
+    public static final String
+            BROADCAST_GAME4 =
+            "BROADCAST_GAME4";
 
     private BroadcastReceiver chooseBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             Intent auxIntent = new Intent(LoadingActivity.this, GameChooseActivity.class);
+            startActivity(auxIntent);
+            finish();
+        }
+    };
+    private BroadcastReceiver Game4BroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Intent auxIntent = new Intent(LoadingActivity.this, GameFourActivity.class);
             startActivity(auxIntent);
             finish();
         }
@@ -55,6 +65,10 @@ public class LoadingActivity extends WearableActivity {
                 .getInstance(this)
                 .registerReceiver(closeBroadcastReceiver, new IntentFilter(
                         BROADCAST_CLOSE_LOADING));
+        LocalBroadcastManager
+                .getInstance(this)
+                .registerReceiver(Game4BroadcastReceiver, new IntentFilter(
+                        BROADCAST_GAME4));
     }
 
     @Override
@@ -67,5 +81,8 @@ public class LoadingActivity extends WearableActivity {
         LocalBroadcastManager
                 .getInstance(this)
                 .unregisterReceiver(closeBroadcastReceiver);
+        LocalBroadcastManager
+                .getInstance(this)
+                .unregisterReceiver(Game4BroadcastReceiver);
     }
 }

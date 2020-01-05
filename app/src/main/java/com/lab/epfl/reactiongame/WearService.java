@@ -42,7 +42,7 @@ public class WearService extends WearableListenerService {
     public enum ACTION_SEND {
         EXAMPLE_SEND_STRING, EXAMPLE_SEND_BITMAP, OPEN_LOADING, OPEN_HIGHSCORES,
         CLOSE_HIGHSCORES, OPEN_GAMECHOOSE, CLOSE_LOADING, CLOSE_GAMERESULT,
-        CLOSE_GAMECHOOSE, UPDATE_GAMECHOOSE, OPEN_GAMERESULT
+        CLOSE_GAMECHOOSE, UPDATE_GAMECHOOSE, OPEN_GAMERESULT, OPEN_GAME4, GAME4_CHANGEIMAGE,CLOSE_GAME4,GAME4_RESULT,GAME4_RESULTSHOW,CLOSE_GAME4RESULT
     }
 
     @Override
@@ -93,6 +93,8 @@ public class WearService extends WearableListenerService {
             case CLOSE_GAMERESULT:
                 sendMessage("close", BuildConfig.W_path_message_gameresult);
                 break;
+            case CLOSE_GAME4:
+                sendMessage("close", BuildConfig.W_path_message_game4);
             case OPEN_GAMERESULT:
                 String isWinner = intent.getStringExtra("isWinner");
                 sendMessage(isWinner, BuildConfig.W_path_message_gamechoose);
@@ -114,6 +116,23 @@ public class WearService extends WearableListenerService {
                 auxDataMapRequest
                         .getDataMap().putStringArrayList("data", newData);
                 sendPutDataMapRequest(auxDataMapRequest);
+                break;
+            case OPEN_GAME4:
+                sendMessage("startgame4",BuildConfig.W_path_message_game4);
+                break;
+            case GAME4_CHANGEIMAGE:
+                String correctNum = intent.getStringExtra("correctNum");
+                sendMessage(correctNum,BuildConfig.W_path_message_game4_changeimage);
+                break;
+            case GAME4_RESULT:
+                sendMessage("go2result",BuildConfig.W_path_message_game4);
+                break;
+            case GAME4_RESULTSHOW:
+                String result = intent.getStringExtra("result");
+                sendMessage(result,BuildConfig.W_path_message_game4_result);
+                break;
+            case CLOSE_GAME4RESULT:
+                sendMessage("close",BuildConfig.W_path_message_game4_resultclose);
                 break;
             default:
                 Log.w(TAG, "Unknown action");
@@ -140,6 +159,10 @@ public class WearService extends WearableListenerService {
                         .BROADCAST_SELECTOPTION);
                 intentSelect.putExtra("indexOption", data);
                 LocalBroadcastManager.getInstance(this).sendBroadcast(intentSelect);
+            case BuildConfig.W_path_message_game4:
+                Intent intentReact = new Intent(GameFourActivity
+                        .BROADCAST_GAME4_REACT);
+                LocalBroadcastManager.getInstance(this).sendBroadcast(intentReact);
             default:
                 Log.w(TAG, "Received a message for unknown path " + path + " : " + data);
         }
